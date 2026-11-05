@@ -87,11 +87,11 @@ const ZONES=[
  desc:'A separate annex with its own street door. Barbershop for cuts and shaves, a ladies’ hair station, two nail tables, a wash basin, and a waiting sofa with reception. Clients book at reception and never enter the shop.',rev:'Per service, plus walk-ins and bookings',cost:'Medium: chairs, mirrors, dryers, clippers, nail supplies'},
 {id:'cafe',name:'Outdoor WiFi café & snack kiosk',short:'Outdoor WiFi café',color:0xe53935,phase:1,tier:'low',access:'outdoor',x:-14.7,z:11.7,w:23.5,d:8.4,ty:.8,th:.25,ph:.6,r:19,
  desc:'Round table and benches outside the shop, under one big shade on the left of the front yard, well clear of every entrance. Eight round tables and benches seat about 36 people, and free customer parking is on the right. Customers buy a drink at the counter and use your WiFi outdoors, so nobody has to come inside. A snack kiosk beside it sells chips, samosas, mandazi, juice, soda and hot drinks, stocked from the chiller.',rev:'Drink and snack sales plus WiFi upsell',cost:'Low: tables, chairs, benches, one big shade, kiosk counter'},
-{id:'wash',name:'Car wash bay',short:'Car wash',color:0x29b6f6,phase:2,tier:'medium',access:'outdoor',x:36.4,z:-1.35,w:11.2,d:7.5,ty:.7,th:0,ph:.7,r:14,
+{id:'wash',name:'Car wash bay',short:'Car wash',color:0x29b6f6,phase:2,tier:'medium',access:'outdoor',x:46.4,z:-1.35,w:11.2,d:7.5,ty:.7,th:0,ph:.7,r:14,
  desc:'A covered single-car wash bay sits between the garage and Myles Fuel, with its open vehicle entry connected directly to the internal aisle. It includes a floor drain, pressure washer and water storage.',rev:'Per wash, with interior cleaning add-ons',cost:'Medium: pressure washer, tank, drainage and canopy'},
-{id:'petrol',name:'Petrol station',short:'Petrol station',color:0xff7043,phase:3,tier:'high',access:'outdoor',x:36.4,z:10.5,w:10.2,d:10.2,ty:.6,th:0,ph:.7,r:14,
+{id:'petrol',name:'Petrol station',short:'Petrol station',color:0xff7043,phase:3,tier:'high',access:'outdoor',x:46.4,z:10.5,w:10.2,d:10.2,ty:.6,th:0,ph:.7,r:14,
  desc:'A compact two-pump petrol station takes the former car-wash area at the front-right side of the compound, beside customer parking. Covered dispensers and a direct aisle connection keep vehicles clear of the plaza entrance and separate from the back-right wash bay.',rev:'Fuel sales and convenience add-ons',cost:'High: fuel storage, pumps, safety systems and licensing'},
-{id:'garage',name:'Myles Motors repair garage & spares',short:'Garage & spares',color:0xf9a825,phase:3,tier:'medium',access:'outdoor',x:35.8,z:-10.65,w:12.1,d:10.1,ty:.7,th:-1.5708,ph:.75,r:16,
+{id:'garage',name:'Myles Motors repair garage & spares',short:'Garage & spares',color:0xf9a825,phase:3,tier:'medium',access:'outdoor',x:45.8,z:-10.65,w:12.1,d:10.1,ty:.7,th:-1.5708,ph:.75,r:16,
  desc:'A plaza-facing workshop at the back-right corner, behind the car wash. Two open service bays handle cars, motorbikes and bicycles, with a separate spare-parts counter and shop inside. Its back wall meets the compound’s right wall and rear boundary.',rev:'Labour, servicing and spare-parts sales',cost:'Medium: tools, lifts, parts stock and workshop fit-out'},
 {id:'cold',name:'Cold storage & drinks chiller',short:'Cold storage',color:0x039be5,phase:1,tier:'high',access:'staff-only',x:5.7,z:-5.2,w:4.2,d:1.8,ty:1,th:0,ph:.9,r:8.5,
  desc:'Chest freezers for fish, milk and drinks rental, plus a chiller that stocks the outdoor café. The drinks chiller runs from Phase 1; freezer rental starts in Phase 4, once the solar setup is proven.',rev:'Rental per kg or per day',cost:'High: needs oversized solar power'},
@@ -217,8 +217,9 @@ bx(130,.1,90,tm('grass',65,45),-9,-.25,0);
 const _fl=bx(16,.2,12,tm('tile',16/2.4,12/2.4),0,-.1,0);
 const PAV=(w,d,x,z)=>bx(w,.1,d,tm('pavers',w/1.6,d/1.6),x,-.05,z);
 const _sw=[PAV(20,3,0,7.9),PAV(16,3,18,7.9),PAV(8,3,-14,7.9)];
-bx(130,.06,7,tm('asphalt',65,3.5,{bumpScale:.3}),-9,-.17,19.9);bx(130,.18,.25,0xb9b9b9,-9,-.1,16.2);
-for(let x=-64;x<=64;x+=4)bx(2,.01,.18,0xffffff,x,-.13,19.9);
+const ROAD_MIN=-74,ROAD_MAX=56,ROAD_Z=19.9;
+bx(ROAD_MAX-ROAD_MIN,.06,7,tm('asphalt',65,3.5,{bumpScale:.3}),(ROAD_MIN+ROAD_MAX)/2,-.17,ROAD_Z);bx(ROAD_MAX-ROAD_MIN,.18,.25,0xb9b9b9,(ROAD_MIN+ROAD_MAX)/2,-.1,16.2);
+for(let x=ROAD_MIN+2;x<=ROAD_MAX-2;x+=4)bx(2,.01,.18,0xffffff,x,-.13,ROAD_Z);
 const SH=4,KEEP=new Set(),BLD=new THREE.Group();S.add(BLD);const _n0=S.children.length;
 function wall(w,h,d,x,y,z){const m=bx(w,h,d,tm('plaster',Math.max(w,d)/2.5,h/2.5),x,y,z);WM.push(m.material);return m}
 wall(16.4,4,.2,0,2,-6.1);
@@ -227,7 +228,7 @@ wall(.5,.9,.2,-7.75,.45,6.1);wall(7.4,.9,.2,-.7,.45,6.1);wall(1.4,.9,.2,3.7,.45,
 /* Main public entrance replaces the old window bay on the left. The other bays stay glazed; no cyber side entrance. */
 GL(1.35,2.4,-7.3,2.8);GL(8.1,2.4,-.95,2.8);GL(1.4,3.1,3.7,2.45);GL(1.4,2.0,5.1,1.9);GL(2.2,3.1,6.9,2.45);GL(1.4,1.1,5.1,3.45);
 {
-const dx=-5.95,dz=6.1,door=new THREE.Group();door.position.set(dx,.9,dz);S.add(door);
+const dx=-5.95,dz=6.1,door=new THREE.Group();door.position.set(dx,0,dz);S.add(door);
 bx(1.55,2.45,.1,NAVY,0,1.22,0,door);bx(1.36,2.25,.045,0xc6e8f8,0,1.22,.07,door);
 bx(.045,.16,.06,GOLD,.52,1.16,.12,door);bx(.08,2.35,.08,GOLD,-.76,1.17,0,door);bx(.08,2.35,.08,GOLD,.76,1.17,0,door);bx(1.6,.08,.08,GOLD,0,2.38,0,door);
 sign('MAIN ENTRANCE','All customers · cyber · classes',2.15,.54,dx,3.55,6.26,S,{bg:'#1A395B'});
@@ -241,9 +242,10 @@ sign('NO CYBER SIDE ENTRY','Main door · teller first',2.2,.55,5.1,2.65,6.2);
 /* Clear glazing keeps the secure staff boundary but lets customers see behind the attendants. */
 gb(10.05,2.1,.05,-2.875,1.05,2.45);wall(.05,2.1,.18,3.275,1.05,2.45);
 bx(11.25,.12,.3,NAVY,-2.3,2.18,2.45);bx(11.25,.08,.32,GOLD,-2.3,2.24,2.45);
-/* The single monitored pass-through after the teller leads only to the cyber room. */
-bx(.1,2.1,.1,GOLD,2.02,1.05,2.45);bx(.1,2.1,.1,GOLD,3.28,1.05,2.45);bx(1.25,.08,.12,GOLD,2.65,2.1,2.45);
-bx(.88,1.7,.055,0x9de9f1,2.65,.88,2.45);bx(.07,1.8,.08,0x2587a7,2.65,.88,2.49);bx(.08,.08,.08,0xf4be48,2.95,.95,2.5);
+/* The single monitored pass-through after the teller is framed into the cyber-room partition. */
+wall(.18,2.1,7.9,3.275,1.05,-2.15);wall(.18,2.1,3.0,3.275,1.05,4.6);
+bx(.12,2.1,.12,GOLD,3.275,1.05,1.8);bx(.12,2.1,.12,GOLD,3.275,1.05,3.1);bx(.12,.08,1.3,GOLD,3.275,2.1,2.45);
+gb(.055,1.7,1.05,3.275,.88,2.45);bx(.07,1.8,.08,0x2587a7,3.24,.88,2.5);bx(.08,.08,.08,0xf4be48,3.2,.95,2.85);
 sign('CYBER PASS','Teller check-in first',1.35,.4,2.65,2.55,2.65,S,{bg:'#006b73',ac:'#54d9e8'});
 [-6.0,-2.4,1.6].forEach((x,i)=>{
   bx(2.7,.9,.78,NAVY,x,.48,4.12);bx(2.8,.07,.86,GOLD,x,.96,4.12);
@@ -276,7 +278,8 @@ wall(.2,3.2,12.4,-15.3,1.6,0,miniShell);wall(7.2,3.2,.2,-11.7,1.6,-6.1,miniShell
 /* Public frontage with a clear glass shop door and display windows. */
 wall(2.45,.9,.2,-14.075,.45,6.1,miniShell);wall(2.45,.9,.2,-9.325,.45,6.1,miniShell);
 GL(2.45,2.3,-14.075,2.05,6.1,miniShell);GL(2.45,2.3,-9.325,2.05,6.1,miniShell);
-bx(.1,2.5,.12,GOLD,-11.7,1.25,5.05,miniShell);bx(.1,2.5,.12,GOLD,-11.7,1.25,6.2,miniShell);gb(.08,2.25,.95,-11.7,1.25,5.62,miniShell);
+bx(.08,2.35,.08,GOLD,-12.3,1.17,6.1,miniShell);bx(.08,2.35,.08,GOLD,-11.1,1.17,6.1,miniShell);bx(1.28,.08,.08,GOLD,-11.7,2.38,6.1,miniShell);
+gb(1.16,2.25,.055,-11.7,1.17,6.1,miniShell);bx(.06,.18,.06,GOLD,-11.18,1.15,6.16,miniShell);
 sign('MYLES MINI MART','Groceries · snacks · cold drinks',4.2,.65,-11.7,2.85,6.2,miniShell,{bg:'#1b5e20',ac:'#b8e986'});
 /* West-wall partition separates the mart from the salon. */
 }
@@ -474,7 +477,7 @@ put(g,0xe0ac69,true,-30.4,1.6,PI);put(g,0x263238,true,-31.4,1.6,PI);
 sign('LOUNGE','Please drink responsibly',2.5,.48,-33.3,2.65,-.3,g,{bg:'#45234b',ac:'#f2c968'});
 /* ================= PUB COURTYARD: OUTDOOR TABLES & WI-FI SEATING ================= */
 {
-const patio=new THREE.Group();S.add(patio);KEEP.add(patio);bx(19.5,.08,10,tm('pavers',12,6,{color:0x928c7d}),-39.45,-.045,-9.8,patio);
+const patio=new THREE.Group();S.add(patio);KEEP.add(patio);Z.pub.patio=patio;bx(19.5,.08,10,tm('pavers',12,6,{color:0x928c7d}),-39.45,-.045,-9.8,patio);
 /* Match the café's striped shade so the pub patio stays comfortable in sun or rain. */
 const sx0=-49.05,sx1=-29.85,sz0=-14.65,sz1=-4.95,sh=3.4,sw=sx1-sx0,sd=sz1-sz0,scx=(sx0+sx1)/2,scz=(sz0+sz1)/2,shadeFrame=0x4a4a4a;
 for(let i=0;i<=6;i++){const x=sx0+.3+i*(sw-.6)/6;[sz0+.3,sz1-.3].forEach(z=>cy(.1,sh,shadeFrame,x,sh/2,z,patio));bx(.14,.14,sd-.2,shadeFrame,x,sh,scz,patio)}
@@ -539,18 +542,56 @@ roof.add(new THREE.Mesh(new THREE.TubeGeometry(cable,32,.035,6,false),M(0x24b8d0
 /* ================= SITE CONTEXT ================= */
 const site=new THREE.Group();S.add(site);KEEP.add(site);const roadTraffic=[];
 {const wallM=tm('plaster',14,1,{});WM.push;const cap=M(NAVY);
-const fenceH=1.6;[[-9,-16,102,.3],[-60,0,.3,32.3],[42,0,.3,32.3]].forEach(([x,z,w,d])=>{bx(w,fenceH,d,tm('plaster',Math.max(w,d)/2.2,.7),x,fenceH/2,z,site);bx(w+.1,.12,d+.1,cap,x,fenceH+.06,z,site)});
-[[ -38.55,4.9],[-33.3,5.6],[-28.75,3.5],[-14.4,25.2],[7,10.4],[25.25,14.5],[41.15,1.7]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});[-42,-41,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
-/* A separate six-metre vehicle opening serves the added west-end parking. */
-[[ -57.5,5],[-45.7,6.6]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});
-[-60,-55,-49,-42.4,-41,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
+const fenceH=1.6;[[-4,-16,112,.3],[-60,0,.3,32.3],[52,0,.3,32.3]].forEach(([x,z,w,d])=>{bx(w,fenceH,d,tm('plaster',Math.max(w,d)/2.2,.7),x,fenceH/2,z,site);bx(w+.1,.12,d+.1,cap,x,fenceH+.06,z,site)});
+/* Four controlled compound entrances: parking, pub walk-in, main plaza and fuel. */
+const frontWalls=[[-57.5,5],[-45.7,6.6],[-13.9,52.2],[30.25,24.5],[51.15,1.7]];
+frontWalls.forEach(([x,w])=>{bx(w,1.6,.3,tm('plaster',w/2.2,.7),x,.8,16.1,site);bx(w+.1,.12,.4,cap,x,1.64,16.1,site)});
+[-60,-55,-49,-42.4,-40,12.2,18,42.5,50.3,52].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
+function compoundGate(cx,width,z,label){
+const steel=M(0x34434e,0,{metalness:.55,roughness:.38}),leafW=width/2,left=cx-width/2,right=cx+width/2;
+[[left,PI/2,1],[right,-PI/2,-1]].forEach(([hinge,angle,dir])=>{const leaf=new THREE.Group();leaf.position.set(hinge,0,z);leaf.rotation.y=angle;site.add(leaf);
+bx(leafW,.1,.12,steel,dir*leafW/2,.86,0,leaf);[.14,1.58].forEach(y=>bx(leafW,.07,.1,steel,dir*leafW/2,y,0,leaf));
+for(let i=0;i<=Math.floor(leafW/.42);i++)bx(.07,1.55,.09,steel,dir*Math.min(leafW-.08,i*.42),.82,0,leaf);
+});
+bx(.3,2.05,.3,cap,left,.98,16.1,site);bx(.3,2.05,.3,cap,right,.98,16.1,site);
+sign(label,'SECURE ACCESS',2.15,.42,cx,2.2,15.8,site,{bg:'#173d64',ac:'#57d6e5'});
+}
+compoundGate(-52,6,16.1,'PARKING GATE');compoundGate(-41.2,2.4,16.1,'PUB GATE');compoundGate(15.1,5.8,16.1,'MAIN PLAZA GATE');compoundGate(46.4,7.8,16.1,'FUEL GATE');
 bx(6,.08,8,tm('asphalt',3,4,{bumpScale:.3}),-52,-.05,12.3,site);sign('LEFT PARKING · VEHICLE ENTRY','Five customer spaces · inside the perimeter',4.4,.58,-52,2.3,15.25,site,{bg:'#1A395B'});
 /* Five perpendicular customer bays in a dedicated paved area beyond the pub. */
 {const p=new THREE.Group();site.add(p);bx(17,.1,11.5,tm('asphalt',8.5,5.75,{bumpScale:.3}),-51.5,-.05,4.75,p);for(let x=-60;x<=-43;x+=3.4)bx(.1,.01,5.2,0xffffff,x,.01,5.1,p);bx(17,.01,.1,0xffffff,-51.5,.01,2.5,p);bx(17,.01,.1,0xffffff,-51.5,.01,7.7,p);[-58.3,-54.9,-51.5,-48.1,-44.7].forEach((x,i)=>car(x,5.1,PI/2,[0xe53935,0x1e88e5,0xeeeeee,0x424242,0xfdd835][i],p));[-59.5,-43.5].forEach(x=>{cy(.05,3,0x444,x,1.5,8.7,p);bx(.55,.14,.55,0xfff1c9,x,3.05,8.7,p,0xffd37a);glow(x,3,8.7,2.4,0xffd9a0,p)});sign('CUSTOMER PARKING','5 spaces · beyond the pub',2.7,.52,-51.5,2.45,8.4,p,{bg:'#1A395B'});}
-/* Independent pedestrian gate and clear paved route around the east edge of parking to the pub door. */
-bx(1.4,.08,24.2,tm('pavers',.9,12,{color:0x8e897d}),-41.7,-.045,7.7,site);bx(12.9,.08,1.6,tm('pavers',7,1.2,{color:0x8e897d}),-48.15,-.045,-4.5,site);sign('PUB WALK-IN GATE','Independent building · follow the path',3.7,.54,-39.2,2.25,15.25,site,{bg:'#45234b',ac:'#f2c968'});
+/* Keep the pub route inside the compound and stop it at the pedestrian gate. */
+bx(1.4,.08,20.3,tm('pavers',.9,10,{color:0x8e897d}),-41.7,-.045,5.95,site);bx(12.9,.08,1.6,tm('pavers',7,1.2,{color:0x8e897d}),-48.15,-.045,-4.5,site);sign('PUB WALK-IN GATE','Independent building · follow the path',3.7,.54,-39.2,2.25,15.25,site,{bg:'#45234b',ac:'#f2c968'});
 /* Road-facing fuel entrance: wide open gate with a paved apron directly into the forecourt. */
-bx(7.8,.08,5.4,tm('asphalt',4,3,{bumpScale:.3}),36.4,-.05,18.0,site);sign('MYLES FUEL · OPEN ENTRY','Direct access from the road',3.2,.55,36.4,2.4,15.3,site,{bg:'#c64b22',ac:'#ffe08a'});
+bx(7.8,.08,5.4,tm('asphalt',4,3,{bumpScale:.3}),46.4,-.05,18.0,site);sign('MYLES FUEL · OPEN ENTRY','Direct access from the road',3.2,.55,46.4,2.4,15.3,site,{bg:'#c64b22',ac:'#ffe08a'});
+/* A staffed security booth at every controlled perimeter entrance. */
+function guardBooth(x,z,area){
+const b=new THREE.Group();b.position.set(x,0,z);site.add(b);
+bx(2.6,.1,2.35,tm('tile',1.3,1.2,{color:0xc6cdd0}),0,.04,0,b);
+[-1.2,1.2].forEach(px=>[-1.05,1.05].forEach(pz=>bx(.12,2.35,.12,0x46545c,px,1.18,pz,b)));
+gb(2.25,1.95,.045,0,1.2,-1.05,b);gb(1.05,1.95,.045,-.65,1.2,1.05,b);gb(1.05,1.95,.045,.65,1.2,1.05,b);
+bx(2.8,.16,2.55,tm('roof',1.5,1.4,{color:0x344b5b,roughness:.5}),0,2.38,0,b);
+bx(1.5,.12,.48,NAVY,0,.95,.28,b);bx(1.55,.06,.5,GOLD,0,1.04,.28,b);put(b,0x263b57,true,0,-.25,0);
+sign('SECURITY',area,1.85,.42,0,2.85,1.1,b,{bg:'#173d64',ac:'#57d6e5'});
+}
+guardBooth(-47.2,13.0,'WEST PARKING');guardBooth(-38.2,13.0,'PUB WALK-IN');guardBooth(19.8,13.0,'PLAZA ENTRY');guardBooth(40.8,13.0,'MYLES FUEL');
+/* Three electrified strands run around all four compound walls, including above each gate. */
+const fenceWire=M(0xe0b947,0,{metalness:.55,roughness:.28});
+function wireX(a,b,z,y){bx(b-a,.035,.035,fenceWire,(a+b)/2,y,z,site)}
+function wireZ(x,a,b,y){bx(.035,.035,b-a,fenceWire,x,y,(a+b)/2,site)}
+[1.85,2.15,2.45].forEach(y=>{wireX(-60,52,-16,y);wireX(-60,52,16.1,y);wireZ(-60,-16,16.1,y);wireZ(52,-16,16.1,y)});
+for(let x=-60;x<=52;x+=5.6){cy(.035,1.05,0x59636c,x,2.15,16.1,site);cy(.035,1.05,0x59636c,x,2.15,-16,site)}
+for(let z=-16;z<=16;z+=5.3){cy(.035,1.05,0x59636c,-60,2.15,z,site);cy(.035,1.05,0x59636c,52,2.15,z,site)}
+/* Overlapping camera views cover the back, front and both sides of the perimeter. */
+function perimeterCamera(x,z,yaw){
+const c=new THREE.Group();c.position.set(x,2.35,z);c.rotation.y=yaw;site.add(c);
+cy(.04,.42,0x59636c,0,-.2,0,c);bx(.48,.2,.36,0x35434c,0,.05,0,c);
+const lens=cy(.09,.07,0x17212a,0,.05,.21,c);lens.rotation.x=PI/2;
+const cone=new THREE.Mesh(new THREE.ConeGeometry(5.1,12,20,1,true),new THREE.MeshBasicMaterial({color:0x45c4db,transparent:true,opacity:.055,side:THREE.DoubleSide,depthWrite:false}));cone.rotation.x=PI/2;cone.position.z=6;c.add(cone);
+}
+for(let x=-56;x<=48;x+=8){perimeterCamera(x,-15.6,0);perimeterCamera(x,15.7,PI)}
+for(let z=-12;z<=12;z+=6){perimeterCamera(-59.6,z,PI/2);perimeterCamera(51.6,z,-PI/2)}
+sign('24/7 CCTV','Overlapping cameras around every perimeter side',3.1,.48,4.8,2.2,15.8,site,{bg:'#173d64',ac:'#57d6e5'});
 const trees=[[-22,-12],[-14,-14],[-5,-14.5],[8,-14.5],[16,-13.5]];
 const gm=[M(0x3f7d3a),M(0x4c8f43),M(0x356f33)],trunk=M(0x5d4037),ico=new THREE.IcosahedronGeometry(1,1),tg=new THREE.CylinderGeometry(.18,.28,1,8);
 trees.forEach(([x,z],i)=>{const t=new THREE.Group();t.position.set(x,0,z);const h=2.6+rnd()*1.6,tr=new THREE.Mesh(tg,trunk);tr.scale.y=h;tr.position.y=h/2;tr.castShadow=true;t.add(tr);
@@ -627,7 +668,7 @@ cy(.05,2.6,0x555,19.6,1.3,15.3,lot);sign('PARKING','free for customers',2,.55,19
 {const w=zone('wash');w.position.set(0,0,0);const x=ZD.wash.x,z=ZD.wash.z;
 bx(10.8,.12,7.35,tm('tile',3,2,{color:0x89949a}),x,-.015,z,w);bx(10.4,.025,7.1,tm('stripe',2,1,{transparent:false,opacity:1,side:2,roughness:.8}),x,.06,z,w);
 /* roof slab and four steel supports */
-bx(11.1,.22,7.5,tm('roof',2,3,{color:0x31566c,roughness:.55,metalness:.15}),x,3.45,z,w);
+const washRoof=bx(11.1,.22,7.5,tm('roof',2,3,{color:0x31566c,roughness:.55,metalness:.15}),x,3.45,z,w);extraRoofs.push(washRoof);
 [-5,5].forEach(dx=>[-3.65,3.65].forEach(dz=>cy(.1,3.3,0x4d626d,x+dx,1.65,z+dz,w)));
 /* striped clearance bars and drain */
 bx(.12,.11,7.3,GOLD,x-5,3.25,z,w);bx(.12,.11,7.3,GOLD,x+5,3.25,z,w);
@@ -636,23 +677,26 @@ bx(10.2,.02,.16,0x3f5057,x,.08,z-3.45,w);for(let k=-4;k<=4;k++)bx(.11,.025,.18,0
 bx(.65,.9,.55,NAVY,x+4.45,.52,z-1.45,w);bx(.5,.08,.38,0x54c5e8,x+4.45,1.02,z-1.45,w);cy(.48,1.5,0x2b8baa,x+4.45,.8,z+1.45,w);cy(.5,.08,0x8de1f2,x+4.45,1.57,z+1.45,w);
 cy(.32,.08,0x333,x+3.65,2.2,z-1.45,w);cy(.04,.5,0x333,x+3.65,2.2,z-1.45,w);
 /* wash-ready car stays near the open vehicle-aisle end of the enlarged bay */
-CARF(x-1.0,z+1.6,0,0xe53935);sign('CAR WASH','entry from customer parking',2.4,.55,x-4.9,2.8,z+3.35,w,{bg:'#14536b'})}}
+CARF(x-1.0,z+1.6,0,0xe53935,w);sign('CAR WASH','entry from the clear vehicle aisle',2.4,.55,x-4.9,2.8,z+3.35,w,{bg:'#14536b'})}}
 
 /* Petrol pumps and covered forecourt in the new right-side compound extension. */
 {const p=zone('petrol');p.position.set(0,0,0);const x=ZD.petrol.x,z=ZD.petrol.z;
-bx(10,.14,10,tm('tile',4,4,{color:0x9aa0a3}),x,-.06,z,p);bx(8.8,.12,4.5,tm('roof',2,2,{color:0xd9e1e7,roughness:.55}),x,3.35,z,p);
+bx(10,.14,10,tm('tile',4,4,{color:0x9aa0a3}),x,-.06,z,p);const fuelRoof=bx(8.8,.12,4.5,tm('roof',2,2,{color:0xd9e1e7,roughness:.55}),x,3.35,z,p);extraRoofs.push(fuelRoof);
 [-3.8,3.8].forEach(dx=>[-1.8,1.8].forEach(dz=>cy(.11,3.2,0x53616a,x+dx,1.6,z+dz,p)));
 [-2.35,2.35].forEach(dx=>{bx(.7,1.45,.55,0xf3f4f5,x+dx,.73,z,p);bx(.54,.42,.05,0x173d64,x+dx,1.02,z+.29,p);bx(.36,.12,.04,0x21b9d5,x+dx,.99,z+.32,p);cy(.035,.6,0x222,x+dx+.37,.72,z+.12,p).rotation.z=PI/2;});
 bx(2.2,.18,.22,0x263238,x,1.08,z-1.65,p);sign('MYLES FUEL','Petrol · safe forecourt',2.7,.55,x,4.05,z,p,{bg:'#c64b22',ac:'#ffe08a'});
-/* direct vehicle connection from the existing parking aisle into the added forecourt */
-bx(2.8,.08,30,tm('asphalt',4,10,{bumpScale:.3}),28.2,-.015,.2);bx(3.4,.08,4.5,tm('asphalt',3,3,{bumpScale:.3}),30.3,-.015,10.5);bx(3.4,.08,7.5,tm('asphalt',2,5,{bumpScale:.3}),30.3,-.015,ZD.wash.z)}
+/* A clear internal vehicle aisle runs east of admin, with branches to the garage, wash and fuel. */
+bx(4.2,.08,30,tm('asphalt',4,10,{bumpScale:.3}),33.3,-.015,.2);
+bx(14.5,.08,4.5,tm('asphalt',8,3,{bumpScale:.3}),34.05,-.015,10.5);
+bx(11.1,.08,7.5,tm('asphalt',5,5,{bumpScale:.3}),35.25,-.015,ZD.wash.z);
+bx(8.6,.08,8,tm('asphalt',4,4,{bumpScale:.3}),35.5,-.015,ZD.garage.z)}
 
 /* ================= MYLES MOTORS: PLAZA-FACING REPAIR GARAGE + SPARES ================= */
-{const base=zone('garage'),g=new THREE.Group(),x=ZD.garage.x,z=ZD.garage.z,z0=-1.35;g.position.z=z-z0;base.add(g);
-bx(1.6,.08,10.1,tm('asphalt',2,5,{bumpScale:.3}),29,-.015,z,base);
+{const base=zone('garage'),g=new THREE.Group(),x=ZD.garage.x-10,z=ZD.garage.z,z0=-1.35;g.position.set(10,0,z-z0);base.add(g);
+bx(1.6,.08,10.1,tm('asphalt',2,5,{bumpScale:.3}),39,-.015,z,base);
 const slab=tm('tile',6,5,{color:0x70777d,roughness:.85});bx(11.9,.14,9.9,slab,x,-.035,z0,g);
-/* The solid east/back wall meets the compound's right perimeter wall at x=41.85. */
-bx(.3,3.05,10.1,tm('plaster',4,2,{color:0x59636c}),41.7,1.52,z0,g);
+/* The solid east/back wall meets the extended compound's right perimeter wall. */
+bx(.3,3.05,10.1,tm('plaster',4,2,{color:0x59636c}),x+5.9,1.52,z0,g);
 bx(12,3.05,.3,tm('plaster',4,2,{color:0x68737c}),x,1.52,z0-5.05,g);bx(12,3.05,.3,tm('plaster',4,2,{color:0x68737c}),x,1.52,z0+5.05,g);
 /* Roof and open west frontage face the plaza and its vehicle aisle. */
 const garageRoof=bx(12.05,.24,10.15,tm('roof',3,3,{color:0x344b5b,roughness:.58,metalness:.18}),x,3.18,z0,g);extraRoofs.push(garageRoof);
@@ -685,8 +729,8 @@ sign('MOTORBIKES · CARS · BICYCLES','Repairs and servicing',2.8,.5,35.4,2.28,-
 
 /* ================= WALKERS, EFFECTS ================= */
 const people=new THREE.Group();S.add(people);
-const N=[[-9.5,7.9,[1,9]],[-3,7.9,[0,2]],[2,7.9,[1,3]],[5.1,7.4,[2,4,6]],[5.1,5,[3,5]],[5.3,2,[4]],[11.7,7.4,[3,7,12]],[11.7,5,[6,8]],[10.75,3.4,[7]],[-11.7,7.4,[0,10]],[-11.7,4.6,[9,11]],[-10.3,3,[10]],[18.9,7.4,[6,13]],[18.9,5,[12,14]],[17.6,3.4,[13]]];
-N.forEach(n=>n[1]-=SH);N.push([0,16.8,[16]],[0,6.2,[15,1,2]]);N[1][2].push(16);N[2][2].push(16);
+const N=[[-9.5,7.9,[1,9]],[-3,7.9,[0,2]],[2,7.9,[1,3]],[-5.95,7.4,[2,4]],[-2.4,5,[3,5]],[3.5,2,[4]],[11.7,7.4,[7]],[11.7,5,[6,8]],[10.75,3.4,[7]],[-11.7,7.4,[0,10]],[-11.7,4.6,[9,11]],[-10.3,3,[10]],[18.9,7.4,[13]],[18.9,5,[12,14]],[17.6,3.4,[13]]];
+N.forEach(n=>n[1]-=SH);N.push([-5.95,10,[16]],[-5.95,6.1,[15,1]]);N[1][2].push(16);
 const walkers=[0,2,4,6,9,12,1,3,15].map(n=>{const f=fig(pick(cols));f.position.set(N[n][0],0,N[n][1]);people.add(f);return{f,n,to:N[n][2][0],sp:.9+rnd()*.5}});
 const wifi=new THREE.Group();S.add(wifi);
 const rings=[0,1,2].map(()=>{const m=new THREE.Mesh(new THREE.RingGeometry(.96,1,64),new THREE.MeshBasicMaterial({color:GOLD,transparent:true,side:2,depthWrite:false}));m.rotation.x=-PI/2;m.position.copy(ROUTER);wifi.add(m);return m});
@@ -708,6 +752,11 @@ bx(.12,.62,.12,0x777,0,-.03,-.2,ruijie);bx(.1,.12,.1,0x555,0,-.2,-.2,ruijie);
 sign('RUIJIE OUTDOOR AP','Compound · café · parking WiFi',3.4,.56,3.5,6.25,9.55,networkVisuals,{bg:'#173d64',ac:'#57d6e5'});
 const coverage=new THREE.Mesh(new THREE.CircleGeometry(38,96),new THREE.MeshBasicMaterial({color:0x21b9d5,transparent:true,opacity:.045,depthWrite:false,side:THREE.DoubleSide}));coverage.rotation.x=-PI/2;coverage.position.set(0,.025,0);networkVisuals.add(coverage);
 [9,18,27,37.8].forEach(r=>{const ring=new THREE.Mesh(new THREE.RingGeometry(r-.025,r+.025,128),new THREE.MeshBasicMaterial({color:0x38cee5,transparent:true,opacity:.42,depthWrite:false,side:THREE.DoubleSide}));ring.rotation.x=-PI/2;ring.position.y=.04;networkVisuals.add(ring)});
+/* A second outdoor access point covers the detached pub and all courtyard tables. */
+const pubAP=new THREE.Group();pubAP.position.set(-42,0,-9.8);networkVisuals.add(pubAP);
+cy(.08,5.2,0x59636c,0,2.6,0,pubAP);bx(.55,.16,.24,0xf2f4f5,0,5.3,0,pubAP);bx(.08,.55,.08,0x59636c,0,5.0,-.13,pubAP);
+const pubCoverage=new THREE.Mesh(new THREE.CircleGeometry(24,80),new THREE.MeshBasicMaterial({color:0x21b9d5,transparent:true,opacity:.055,depthWrite:false,side:THREE.DoubleSide}));pubCoverage.rotation.x=-PI/2;pubCoverage.position.set(-42,.03,-9.8);networkVisuals.add(pubCoverage);
+sign('PUB COURTYARD WIFI AP','Pub · lounge · covered patio',3.1,.48,-41.5,5.75,-9.8,networkVisuals,{bg:'#173d64',ac:'#57d6e5'});
 /* The highlighted public route runs from the main entrance to the teller, then to the indoor cyber door. */
 {
 const route=new THREE.Group();S.add(route);const pts=[new V(-5.95,.065,8.1),new V(-5.95,.065,2.15),new V(-5.95,.065,1.0),new V(-2.4,.065,1.0),new V(1.8,.065,1.0),new V(2.65,.065,.8),new V(2.65,.065,-1.55),new V(3.2,.065,-1.1)];
@@ -723,16 +772,16 @@ const SHOPLB=document.createElement('div');SHOPLB.className='lbl m';SHOPLB.textC
 /* ================= STATE, CAMERA ================= */
 const st={roof:1,xray:0,night:0,people:1,wifi:1,network:1,labels:1,steam:1,tour:0,measure:0};
 let sel=null,phase=4,nightT=0,Q='high',qAuto=true,pres=null;
-const c={t:new V(-9,1,-1),th:.2,ph:.82,r:68},gl2={t:new V(-9,1,-1),th:.2,ph:.82,r:68};
-const OV={th:.2,ph:.82,r:68};
-function fly(id,instant){if(!id||id==='all'){sel=null;gl2.t.set(-9,1,-1);gl2.th=OV.th;gl2.ph=OV.ph;gl2.r=OV.r}else{const z=ZD[id];sel=id;gl2.t.set(z.x,z.ty,z.z);gl2.th=z.th;gl2.ph=z.ph;gl2.r=z.r}
+const c={t:new V(-4,1,1),th:.2,ph:.82,r:96},gl2={t:new V(-4,1,1),th:.2,ph:.82,r:96};
+const OV={th:.2,ph:.82,r:96};
+function fly(id,instant){if(!id||id==='all'){sel=null;gl2.t.set(-4,1,1);gl2.th=OV.th;gl2.ph=OV.ph;gl2.r=OV.r}else{const z=ZD[id];sel=id;gl2.t.set(z.x,z.ty,z.z);gl2.th=z.th;gl2.ph=z.ph;gl2.r=z.r}
 if(instant||RM){c.t.copy(gl2.t);c.th=gl2.th;c.ph=gl2.ph;c.r=gl2.r}
 info();document.querySelectorAll('#zones button').forEach(b=>b.classList.toggle('on',b.dataset.id===(sel||'all')));
 ids.forEach(k=>padStyle(k));hashW()}
 function padStyle(k){const z=Z[k];z.pad.material.opacity=z.ghost?(k===sel?.35:.12):(k===sel?.7:.28)}
-function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers enter through the main door and check in at the secure teller counter. The mini mart is the next room beside stationery and cyber services, with a supervised lobby connection. The salon and tailoring rooms continue the west wing to an independent, enlarged Myles Pub & Lounge at the far back-left corner. Round-table outdoor seating with free compound WiFi fills the courtyard between the pub and the other building; a separate pedestrian gate and paved route lead to the pub entrance. A dedicated administration suite beside the photo studio gives managers and accountants private offices, a shared meeting area, reception and secure filing. Five customer parking spaces and a separate vehicle gate sit in front of the pub corner. Cyber and class visitors use the indoor lab door. Starlink feeds the POP rack, one Ubiquiti ceiling access point serves each room, and a Ruijie outdoor AP covers the compound, café and parking. The petrol station has a dedicated wide opening and driveway from the road. The car wash sits between the fuel pumps and a plaza-facing repair garage at the back-right corner. The garage includes open vehicle bays and an internal spare-parts shop. Roofs and the rooftop dish are shown by default. Pick a zone above, use the phase filter, or click anything.';return}
+function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers enter through the main door and check in at the secure teller counter. The mini mart is the next room beside stationery and cyber services, with a supervised lobby connection. The salon and tailoring rooms continue the west wing to an independent, enlarged Myles Pub & Lounge at the far back-left corner. Round-table outdoor seating with free compound WiFi fills the courtyard between the pub and the other building; a separate pedestrian gate and paved route lead to the pub entrance. A dedicated administration suite beside the photo studio gives managers and accountants private offices, a shared meeting area, reception and secure filing. Five customer parking spaces and a separate vehicle gate sit in front of the pub corner. Four compound gates serve the plaza, pub, parking and fuel entries, each with a staffed guard room; an electric fence follows every perimeter wall, and overlapping CCTV cameras cover all sides. The extended right wall encloses a clear vehicle lane past the administration suite to the garage, car wash and fuel station. Cyber and class visitors use the indoor lab door. Starlink feeds the POP rack, one Ubiquiti ceiling access point serves each room, and a Ruijie outdoor AP covers the compound, café and parking, with a second Ruijie AP dedicated to the pub lounge and courtyard. The petrol station has a dedicated wide opening and driveway from the road. The car wash sits between the fuel pumps and a plaza-facing repair garage at the back-right corner. The garage includes open vehicle bays and an internal spare-parts shop. Roofs and the rooftop dish are shown by default. Pick a zone above, use the phase filter, or click anything.';return}
 const z=ZD[sel];e.innerHTML='<h2>'+z.name+'</h2><span class="badge">'+PH[z.phase]+'</span><span class="badge">'+(TIER[z.tier])+' cost</span><br>'+z.desc+'<br><b>Access:</b> '+ACC[z.access]+'<br><b>Income:</b> '+z.rev+'<br><b>Startup:</b> '+z.cost}
-function setPhase(p){phase=p;ids.forEach(k=>{const z=Z[k],gh=z.phase>p;z.ghost=gh;z.g.visible=!gh;z.ol.visible=gh;z.mo.visible=!!st.measure&&!gh;padStyle(k)});
+function setPhase(p){phase=p;ids.forEach(k=>{const z=Z[k],gh=z.phase>p;z.ghost=gh;z.g.visible=!gh;if(z.patio)z.patio.visible=!gh;z.ol.visible=gh;z.mo.visible=!!st.measure&&!gh;padStyle(k)});
 document.querySelectorAll('#phs button').forEach(b=>b.classList.toggle('on',+b.dataset.p===p));
 $('#phn').textContent=p===4?'All '+ZONES.length+' zones shown.':'Later phases are ghosted: footprint only.';tiers();hashW()}
 function tiers(){const vis=ZONES.filter(z=>z.phase<=phase),cnt={};TIERS.forEach(t=>cnt[t]=0);vis.forEach(z=>cnt[z.tier]++);
@@ -789,16 +838,16 @@ $('#pp').onclick=()=>{if(!pres)return;pres.paused=!pres.paused;$('#pp').textCont
 function shot(){const pr=R.getPixelRatio();R.setPixelRatio(2);R.setSize(innerWidth,innerHeight);R.render(S,Cam);let url;try{url=cv.toDataURL('image/png')}catch(e){}R.setPixelRatio(pr);size();
 if(!url){toast('Screenshot is blocked in this view. Open the file in a browser tab.');return}const a=document.createElement('a');a.href=url;a.download='mylesplaza-'+(sel||'overview')+'-'+(st.night?'night':'day')+'.png';document.body.appendChild(a);a.click();a.remove();toast('Screenshot saved')}
 /* deep link */
-let hT;function hashW(now){const w=()=>{try{const p=new URLSearchParams();if(sel)p.set('zone',sel);if(phase!==4)p.set('phase',phase);if(st.night)p.set('night',1);if(!qAuto)p.set('q',Q);if(st.roof)p.set('roof',1);if(st.xray)p.set('xray',1);if(st.measure)p.set('measure',1);const h=p.toString();history.replaceState(null,'',h?'#'+h:location.pathname+location.search)}catch(e){}};clearTimeout(hT);if(now)w();else hT=setTimeout(w,250)}
+let hT;function hashW(now){const w=()=>{try{const p=new URLSearchParams();if(sel)p.set('zone',sel);if(phase!==4)p.set('phase',phase);if(st.night)p.set('night',1);if(!qAuto)p.set('q',Q);p.set('roof',st.roof?'1':'0');if(st.xray)p.set('xray',1);if(st.measure)p.set('measure',1);const h=p.toString();history.replaceState(null,'',h?'#'+h:location.pathname+location.search)}catch(e){}};clearTimeout(hT);if(now)w();else hT=setTimeout(w,250)}
 function hashR(){try{const p=new URLSearchParams(location.hash.slice(1));const n=k=>p.get(k)==='1';if(p.has('q')&&QS[p.get('q')]){Q=p.get('q');qAuto=false}
-const ph=+p.get('phase');if(ph>=1&&ph<=4)phase=ph;['night','roof','xray','measure'].forEach(k=>{if(n(k))st[k]=1;tb[k].classList.toggle('on',!!st[k]);tb[k].setAttribute('aria-pressed',!!st[k])});
+const ph=+p.get('phase');if(ph>=1&&ph<=4)phase=ph;['night','roof','xray','measure'].forEach(k=>{if(p.has(k))st[k]=n(k)?1:0;tb[k].classList.toggle('on',!!st[k]);tb[k].setAttribute('aria-pressed',!!st[k])});
 return p.get('zone')&&ZD[p.get('zone')]?p.get('zone'):null}catch(e){return null}}
 /* input */
 const ptr=new Map();let moved=0;
 cv.addEventListener('contextmenu',e=>e.preventDefault());
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptr.set(e.pointerId,[e.clientX,e.clientY,panMode||e.button===2||e.shiftKey]);moved=0});
 cv.addEventListener('pointermove',e=>{if(!ptr.has(e.pointerId))return;const o=ptr.get(e.pointerId);
-if(ptr.size==1){const dx=e.clientX-o[0],dy=e.clientY-o[1];if(o[2]){const s=gl2.r/Math.max(cv.clientHeight,1),rx=Math.cos(gl2.th),rz=-Math.sin(gl2.th),fx=Math.sin(gl2.th),fz=Math.cos(gl2.th);gl2.t.x+=s*(-dx*rx+dy*fx);gl2.t.z+=s*(-dx*rz+dy*fz)}else{gl2.th-=dx*.006;gl2.ph=clamp(gl2.ph-dy*.006,.15,1.5)}moved+=Math.abs(dx)+Math.abs(dy)}
+if(ptr.size==1){const dx=e.clientX-o[0],dy=e.clientY-o[1];if(o[2]){const s=gl2.r/Math.max(cv.clientHeight,1),rx=Math.cos(gl2.th),rz=-Math.sin(gl2.th),fx=Math.sin(gl2.th),fz=Math.cos(gl2.th);gl2.t.x+=s*(-dx*rx-dy*fx);gl2.t.z+=s*(-dx*rz-dy*fz)}else{gl2.th-=dx*.006;gl2.ph=clamp(gl2.ph-dy*.006,.15,1.5)}moved+=Math.abs(dx)+Math.abs(dy)}
 else if(ptr.size==2){const other=[...ptr.entries()].find(([k])=>k!==e.pointerId)[1];const d0=Math.hypot(o[0]-other[0],o[1]-other[1]),d1=Math.hypot(e.clientX-other[0],e.clientY-other[1]);gl2.r=clamp(gl2.r*d0/Math.max(d1,1),ZOOM_MIN,ZOOM_MAX);moved+=9}
 ptr.set(e.pointerId,[e.clientX,e.clientY,o[2]])});
 cv.addEventListener('pointerup',e=>{if(ptr.has(e.pointerId)&&moved<6&&ptr.size==1)hit(e);ptr.delete(e.pointerId)});
@@ -829,15 +878,15 @@ if(st.wifi)rings.forEach((m,i)=>{const s=(t*.3+i/3)%1;m.scale.setScalar(.4+s*9);
 if(st.steam&&!RM)puffs.forEach(p=>{const s=(t*.4+p.userData.o)%1;p.position.set(p.userData.x+Math.sin(t*3+p.userData.o*9)*.02,p.userData.y+s*.5,p.userData.z);p.material.opacity=(1-s)*.45;p.scale.setScalar(1+s*1.5)});
 if(nightT>.3&&!RM)NEON.forEach((m,i)=>{m.emissiveIntensity=1.6+Math.sin(t*9+i*3)*.12+(Math.sin(t*31+i)>.97?-.6:0)});
 LEDS.forEach(l=>l.material.emissiveIntensity=Math.sin(t*5+l.userData.k*1.7)>-.2?1:.15);
-roadTraffic.forEach(v=>{v.group.position.x+=v.speed*dt;if(v.speed>0&&v.group.position.x>67)v.group.position.x=-67;else if(v.speed<0&&v.group.position.x< -67)v.group.position.x=67});
+roadTraffic.forEach(v=>{v.group.position.x+=v.speed*dt;if(v.speed>0&&v.group.position.x>ROAD_MAX-2.2)v.group.position.x=ROAD_MIN+2.2;else if(v.speed<0&&v.group.position.x<ROAD_MIN+2.2)v.group.position.x=ROAD_MAX-2.2});
 walkers.forEach(w=>{const off=w.f.userData.off;w.f.visible=!off;if(off||!st.people)return;const tg=N[w.to];tmp.set(tg[0]-w.f.position.x,0,tg[1]-w.f.position.z);const d=tmp.length();
 if(d<.1){const nx=N[w.to][2].filter(k=>k!==w.n);w.n=w.to;w.to=pick(nx.length?nx:N[w.to][2])}else{tmp.normalize();w.f.position.addScaledVector(tmp,.03*w.sp*dt*60);w.f.rotation.y=Math.atan2(tmp.x,tmp.z);const ph=t*8*w.sp,u=w.f.userData;u.legs[0].rotation.x=Math.sin(ph)*.6;u.legs[1].rotation.x=-Math.sin(ph)*.6;u.arms[0].rotation.x=-Math.sin(ph)*.5;u.arms[1].rotation.x=Math.sin(ph)*.5;w.f.position.y=Math.abs(Math.sin(ph))*.03}});
 if(st.labels||st.measure){ZONES.forEach((z,i)=>{const l=LB[i];if(!st.labels){l.style.display='none';return}
-/* Room and café labels are shown only from within their footprint, and never through a nearer wall or opaque roof. */
+/* Room and café labels appear only inside that room and never through an opaque object or roof. */
 const inside=Math.abs(Cam.position.x-z.x)<z.w/2&&Math.abs(Cam.position.z-z.z)<z.d/2&&Cam.position.y<4.3;
-tmp.set(z.x,2.9,z.z);const dist=Cam.position.distanceTo(tmp);const dir=tmp.clone().sub(Cam.position).normalize();labelRay.set(Cam.position,dir);labelRay.far=dist-.15;
-const blocked=labelRay.intersectObjects(S.children,true).length>0;
-tmp.project(Cam);if(tmp.z>1||!inside||blocked){l.style.display='none';return}l.style.display='';
+if(!inside){l.style.display='none';return}tmp.set(z.x,2.9,z.z);tmp.project(Cam);if(tmp.z>1||Math.abs(tmp.x)>1||Math.abs(tmp.y)>1){l.style.display='none';return}
+const target=new V(z.x,2.9,z.z),dist=Cam.position.distanceTo(target);labelRay.set(Cam.position,target.sub(Cam.position).normalize());labelRay.far=dist-.15;
+const blocked=labelRay.intersectObjects(S.children,true).some(h=>vis(h.object));if(blocked){l.style.display='none';return}l.style.display='';
 l.textContent=z.short+(st.measure?' · '+z.w+'×'+z.d+' m':'')+(Z[z.id].ghost?' · P'+z.phase:'');l.classList.toggle('dim',Z[z.id].ghost);
 l.style.transform='translate('+((tmp.x*.5+.5)*innerWidth)+'px,'+((-tmp.y*.5+.5)*innerHeight)+'px) translate(-50%,-50%)'});
 if(st.measure){tmp.set(0,.3,-6.7-SH).project(Cam);SHOPLB.style.transform='translate('+((tmp.x*.5+.5)*innerWidth)+'px,'+((-tmp.y*.5+.5)*innerHeight)+'px) translate(-50%,-50%)'}}
