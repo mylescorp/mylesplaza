@@ -439,6 +439,12 @@ sign('LOUNGE','Please drink responsibly',2.5,.48,-33.3,2.65,-.3,g,{bg:'#45234b',
 /* ================= PUB COURTYARD: OUTDOOR TABLES & WI-FI SEATING ================= */
 {
 const patio=new THREE.Group();S.add(patio);KEEP.add(patio);bx(19.5,.08,10,tm('pavers',12,6,{color:0x928c7d}),-39.45,-.045,-9.8,patio);
+/* Match the café's striped shade so the pub patio stays comfortable in sun or rain. */
+const sx0=-49.05,sx1=-29.85,sz0=-14.65,sz1=-4.95,sh=3.4,sw=sx1-sx0,sd=sz1-sz0,scx=(sx0+sx1)/2,scz=(sz0+sz1)/2,shadeFrame=0x4a4a4a;
+for(let i=0;i<=6;i++){const x=sx0+.3+i*(sw-.6)/6;[sz0+.3,sz1-.3].forEach(z=>cy(.1,sh,shadeFrame,x,sh/2,z,patio));bx(.14,.14,sd-.2,shadeFrame,x,sh,scz,patio)}
+[sz0+.3,sz1-.3].forEach(z=>bx(sw,.14,.14,shadeFrame,scx,sh,z,patio));
+bx(sw+.8,.08,sd+.8,tm('stripe',2,1,{transparent:false,opacity:1,side:2,roughness:.8}),scx,sh+.12,scz,patio).rotation.x=.04;
+for(let i=0;i<6;i++){const x=sx0+1.7+i*3.15;cy(.01,.5,0x333,x,sh-.25,scz,patio);bx(.35,.25,.35,0xfff1c9,x,sh-.6,scz,patio,0xffd37a);glow(x,sh-.6,scz,2.4,0xffd9a0,patio)}
 for(const x of [-47.3,-44.2,-35.4])for(const z of [-12.35,-7.15]){
 cy(1.02,.08,WOODM,x,.79,z,patio);cy(.09,.7,0x444,x,.39,z,patio);cy(.4,.06,0x333,x,.06,z,patio);
 [[x+1.38,z,PI/2],[x-1.38,z,-PI/2],[x,z+1.38,0],[x,z-1.38,PI]].forEach(([cx,cz,ry],i)=>chair(cx,cz,ry,patio,[0x45234b,0x6a4b68,0x354c68,0x7b6547][i]));
