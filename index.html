@@ -526,7 +526,7 @@ sign('MIKROTIK ROUTER · PoE SWITCH','Starlink in · access points out',2.25,.48
 /* ================= ROOF ================= */
 const roof=new THREE.Group();roof.userData.z='pop';S.add(roof);
 const RM_=(w,d)=>tm('roof',w/1.6,d/1.6,{roughness:.55,metalness:.35});
-const roofPanels=[],extraRoofs=[];roofPanels.push(bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof));[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.6,12.6,18.9,3.4,0],[7.6,12.6,26.1,3.4,-4],[7.6,12.6,-18.9,3.4,0],[7.6,12.6,-26.1,3.4,0],[11.2,12.6,-54.6,3.4,-5.9]].forEach(([w,d,x,y,z])=>roofPanels.push(bx(w,.25,d,RM_(w,d),x,y,z,roof)));
+const roofPanels=[],extraRoofs=[];roofPanels.push(bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof));[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.4,12.6,18.9,3.4,0],[7.2,12.6,26.2,3.4,0],[7.6,12.6,-18.9,3.4,0],[7.6,12.6,-26.1,3.4,0],[11.2,12.6,-54.6,3.4,-5.9]].forEach(([w,d,x,y,z])=>roofPanels.push(bx(w,.25,d,RM_(w,d),x,y,z,roof)));
 {const sm=new THREE.MeshStandardMaterial({map:TEX.solar,roughness:.25,metalness:.5});MATS.push(sm);for(let i=0;i<12;i++){const p=bx(2,.06,1.2,sm,-5.3+(i%4)*3.5,4.45,-4.4+Math.floor(i/4)*2.6,roof);p.rotation.x=-.35}}
 /* Starlink dish uplinks to the POP router and switch. */
 {
