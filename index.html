@@ -63,7 +63,7 @@ const PH={1:'Phase 1 · month 1',2:'Phase 2 · once foot traffic is proven',3:'P
 const PHB=[[1,'Phase 1'],[2,'1+2'],[3,'1–3'],[4,'All']];
 const TIER={'almost-nothing':'Almost nothing',low:'Low','low-medium':'Low to medium',medium:'Medium',high:'High'};
 const TIERS=Object.keys(TIER);
-const ACC={counter:'Enter through the main door and stay on the customer side of the teller counter','staff-only':'Staff only, customers order at the teller counter',"own-door":'Separate annex entrance','customer-room':'Enter through the main door, check in at the teller, then use the indoor lab door',outdoor:'Outdoor, open to everyone'};
+const ACC={counter:'Enter through the main door and stay on the customer side of the teller counter','staff-only':'Staff only, customers order at the teller counter',"own-door":'Separate annex entrance','customer-room':'Enter through the main door, check in at the teller, then use the indoor lab door','store-room':'Enter from the plaza or through the supervised lobby connection',outdoor:'Outdoor, open to everyone'};
 const ZONES=[
 {id:'stat',name:'Stationery & school supplies',short:'Stationery',color:0x1e88e5,phase:1,tier:'low-medium',access:'staff-only',x:-4.2,z:-4,w:10,d:3.6,ty:1.2,th:0,ph:.9,r:10,
  desc:'The main entrance opens into a controlled customer lobby. Customers order stationery at the bank-style teller counter; staff retrieve stock from the secured shelves behind it. The same main entrance serves cyber customers and students.',rev:'10–50% by item',cost:'Low to medium: stock'},
@@ -75,13 +75,15 @@ const ZONES=[
  desc:'M-Pesa and Airtel Money deposits and withdrawals are handled at a secure teller window in the main lobby. Customers enter through the main door and remain in front of the counter; the teller barrier prevents access to stock and staff work areas.',rev:'Commission per transaction',cost:'Medium: float capital'},
 {id:'browse',name:'Cyber lab, study & classes',short:'Cyber lab & classes',color:0x00acc1,phase:2,tier:'low-medium',access:'customer-room',x:5.6,z:3.2,w:4.8,d:5.6,ty:.9,th:-.2,ph:.8,r:10,
  desc:'All cyber, printing-service and class visitors enter through the main door and check in at the teller first. A controlled indoor door then leads into this open computer lab and classroom. Glass partitions keep the room separate from stationery stock and staff work areas; there is no customer side entrance.',rev:'Per-hour browsing, desk and class fees',cost:'Low to medium: PCs and chairs'},
+{id:'market',name:'Myles Mini Mart',short:'Mini mart',color:0x66bb6a,phase:2,tier:'low-medium',access:'store-room',x:-11.7,z:0,w:7.2,d:12.2,ty:1,th:.8,ph:1.38,r:15,
+ desc:'A customer mini mart in the next room directly beside the main stationery and cyber-services entrance. Shoppers can enter from the plaza and through a supervised internal door from the public lobby. Shelves carry everyday groceries, snacks, toiletries and cold drinks.',rev:'Retail margin per item',cost:'Low to medium: shelves, chiller and opening stock'},
 {id:'chg',name:'Phone charging & repair',short:'Phone charging',color:0xfb8c00,phase:2,tier:'low',access:'staff-only',x:7.2,z:-1.5,w:1.6,d:3.2,ty:.9,th:-1.1,ph:.9,r:8,
  desc:'Solar and UPS backed charging bench with accessories and quick repairs, served by staff. Power cuts push people to you.',rev:'Small per customer, volume driven',cost:'Low'},
 {id:'game',name:'PS5 gaming lounge & online play',short:'PS5 gaming lounge',color:0x5e35b1,phase:4,tier:'high',access:'own-door',x:11.7,z:0,w:7,d:12.2,ty:1,th:.45,ph:.85,r:10,
  desc:'A separate annex with its own street door, so gamers never enter the shop. Three PS5 stations with TVs, gaming chairs and controllers on your own fibre or WiFi, charged per hour or per match, with tournaments in school holidays. Needs low latency and clean backup power.',rev:'Per-hour or per-match fees',cost:'High: PS5s, TVs, controllers, fibre, power'},
 {id:'tee',name:'T-shirt printing & branding',short:'T-shirt printing',color:0xd81b60,phase:3,tier:'medium',access:'staff-only',x:-3.5,z:1,w:4,d:4.2,ty:1,th:.6,ph:.9,r:9,
  desc:'Staff-only workshop behind the counter with a heat press, transfer printer and vinyl cutter for custom T-shirts, caps, mugs and uniforms. Customers order and collect at the front counter. School, church and SACCO bulk orders are the real money.',rev:'Per item, plus bulk uniform orders',cost:'Medium: heat press, printer, blanks'},
-{id:'salon',name:'Salon, barber & nails',short:'Salon',color:0x00897b,phase:4,tier:'medium',access:'own-door',x:-11.7,z:0,w:7,d:12.2,ty:1,th:-.45,ph:.85,r:10,
+{id:'salon',name:'Salon, barber & nails',short:'Salon',color:0x00897b,phase:4,tier:'medium',access:'own-door',x:-18.9,z:0,w:7,d:12.2,ty:1,th:-.45,ph:.85,r:10,
  desc:'A separate annex with its own street door. Barbershop for cuts and shaves, a ladies’ hair station, two nail tables, a wash basin, and a waiting sofa with reception. Clients book at reception and never enter the shop.',rev:'Per service, plus walk-ins and bookings',cost:'Medium: chairs, mirrors, dryers, clippers, nail supplies'},
 {id:'cafe',name:'Outdoor WiFi café & snack kiosk',short:'Outdoor WiFi café',color:0xe53935,phase:1,tier:'low',access:'outdoor',x:-14.7,z:11.7,w:23.5,d:8.4,ty:.8,th:.25,ph:.6,r:19,
  desc:'Round table and benches outside the shop, under one big shade on the left of the front yard, well clear of every entrance. Eight round tables and benches seat about 36 people, and free customer parking is on the right. Customers buy a drink at the counter and use your WiFi outdoors, so nobody has to come inside. A snack kiosk beside it sells chips, samosas, mandazi, juice, soda and hot drinks, stocked from the chiller.',rev:'Drink and snack sales plus WiFi upsell',cost:'Low: tables, chairs, benches, one big shade, kiosk counter'},
@@ -99,8 +101,10 @@ const ZONES=[
  desc:'Counter-served shop for routers, CPEs, cables, CCTV kits, solar panels and batteries, with a demo wall customers can see through the front windows. It is your own expertise, it sells to people already on your WiFi, and it ties straight into the POP.',rev:'High margin, ties into the POP',cost:'Medium: stock capital'},
 {id:'photo',name:'Photo studio',short:'Photo studio',color:0x6d4c41,phase:3,tier:'low',access:'own-door',x:18.9,z:0,w:7,d:12.2,ty:1,th:.5,ph:.85,r:10,
  desc:'A third annex with its own street door: passport photos, events, graduation shots and framing. It extends the digital services desk and the T-shirt printing. Clients book at the reception and never enter the shop.',rev:'Per session, seasonal peaks',cost:'Low: camera, lights, backdrop'},
-{id:'tailor',name:'Tailoring & embroidery',short:'Tailoring',color:0xc0ca33,phase:3,tier:'low-medium',access:'staff-only',x:-18.9,z:0,w:7,d:12.2,ty:1,th:-.5,ph:.85,r:10,
- desc:'Staff workshop in the left annex, right next to the salon, so the two skilled-trade lines share one side of the building. School uniforms, church wear and repairs, plus embroidery. It pairs with T-shirt branding for bulk uniform orders, and orders are taken at the front counter.',rev:'Per order, strong on bulk uniforms',cost:'Low to medium: machines and a skilled tailor'}
+{id:'tailor',name:'Tailoring & embroidery',short:'Tailoring',color:0xc0ca33,phase:3,tier:'low-medium',access:'staff-only',x:-26.1,z:0,w:7,d:12.2,ty:1,th:-.5,ph:.85,r:10,
+ desc:'Staff workshop in the left annex, right next to the salon, so the two skilled-trade lines share one side of the building. School uniforms, church wear and repairs, plus embroidery. It pairs with T-shirt branding for bulk uniform orders, and orders are taken at the front counter.',rev:'Per order, strong on bulk uniforms',cost:'Low to medium: machines and a skilled tailor'},
+{id:'pub',name:'Myles Pub & Lounge',short:'Pub & lounge',color:0x8e24aa,phase:4,tier:'medium',access:'own-door',x:-33.3,z:0,w:7.2,d:12.2,ty:1,th:0,ph:1.42,r:15,
+ desc:'A separate pub and lounge at the far-left end of the new west wing, with its own entrance and a pedestrian gate from the road. A bar, booth seating, high tables and a small music corner keep evening customers away from the service counters and vehicle lanes.',rev:'Food and drink sales, plus events',cost:'Medium: bar fit-out, seating, permits and opening stock'}
 ];
 const ZD={};ZONES.forEach(z=>ZD[z.id]=z);const ids=ZONES.map(z=>z.id);
 
@@ -131,7 +135,7 @@ const stars=(()=>{const n=700,p=new Float32Array(n*3);for(let i=0;i<n;i++){const
 /* ================= LIGHTS ================= */
 const hemi=new THREE.HemisphereLight(0xcfe3f5,0x8a8f7a,.4);S.add(hemi);
 const sun=new THREE.DirectionalLight(0xfff3dd,1.35);sun.position.set(14,26,26);sun.target.position.set(0,0,2);S.add(sun.target);sun.castShadow=true;
-Object.assign(sun.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:110});sun.shadow.camera.updateProjectionMatrix();sun.shadow.bias=-.0004;sun.shadow.normalBias=.03;sun.shadow.mapSize.set(2048,2048);S.add(sun);
+Object.assign(sun.shadow.camera,{left:-50,right:50,top:30,bottom:-30,near:1,far:110});sun.shadow.camera.updateProjectionMatrix();sun.shadow.bias=-.0004;sun.shadow.normalBias=.03;sun.shadow.mapSize.set(2048,2048);S.add(sun);
 const moon=new THREE.DirectionalLight(0x8fa8ff,0);moon.position.set(-18,24,14);S.add(moon);
 
 /* ================= MATERIALS & TEXTURES ================= */
@@ -207,16 +211,16 @@ Z[id]=Object.assign({root,g,pad,ol,mo,ghost:false},D);return g}
 
 /* ================= SHELL ================= */
 const stage=new THREE.Group();S.add(stage);
-bx(90,.1,90,tm('grass',45,45),0,-.25,0);
+bx(130,.1,90,tm('grass',65,45),-9,-.25,0);
 const _fl=bx(16,.2,12,tm('tile',16/2.4,12/2.4),0,-.1,0);
 const PAV=(w,d,x,z)=>bx(w,.1,d,tm('pavers',w/1.6,d/1.6),x,-.05,z);
 const _sw=[PAV(20,3,0,7.9),PAV(16,3,18,7.9),PAV(8,3,-14,7.9)];
-bx(90,.06,7,tm('asphalt',45,3.5,{bumpScale:.3}),0,-.17,19.9);bx(90,.18,.25,0xb9b9b9,0,-.1,16.2);
-for(let x=-40;x<=40;x+=4)bx(2,.01,.18,0xffffff,x,-.13,19.9);
+bx(130,.06,7,tm('asphalt',65,3.5,{bumpScale:.3}),-9,-.17,19.9);bx(130,.18,.25,0xb9b9b9,-9,-.1,16.2);
+for(let x=-64;x<=64;x+=4)bx(2,.01,.18,0xffffff,x,-.13,19.9);
 const SH=4,KEEP=new Set(),BLD=new THREE.Group();S.add(BLD);const _n0=S.children.length;
 function wall(w,h,d,x,y,z){const m=bx(w,h,d,tm('plaster',Math.max(w,d)/2.5,h/2.5),x,y,z);WM.push(m.material);return m}
 wall(16.4,4,.2,0,2,-6.1);
-wall(.2,4,12.4,-8.1,2,0);wall(.2,4,12.4,8.1,2,0);
+wall(.2,4,9.3,-8.1,2,-1.45);wall(.2,4,1.3,-8.1,2,5.45);bx(.08,2.5,.08,GOLD,-8.1,1.25,3.2);bx(.08,2.5,.08,GOLD,-8.1,1.25,4.8);gb(.08,2.3,1.5,-8.1,1.25,4);wall(.2,4,12.4,8.1,2,0);
 wall(.5,.9,.2,-7.75,.45,6.1);wall(7.4,.9,.2,-.7,.45,6.1);wall(1.4,.9,.2,3.7,.45,6.1);wall(1.4,.9,.2,5.1,.45,6.1);wall(2.2,.9,.2,6.9,.45,6.1);
 /* Main public entrance replaces the old window bay on the left. The other bays stay glazed; no cyber side entrance. */
 GL(1.35,2.4,-7.3,2.8);GL(8.1,2.4,-.95,2.8);GL(1.4,3.1,3.7,2.45);GL(1.4,2.0,5.1,1.9);GL(2.2,3.1,6.9,2.45);GL(1.4,1.1,5.1,3.45);
@@ -261,8 +265,29 @@ glow(0,0,.4,9,0xfff1c9,grp);GLOWS[GLOWS.length-1].userData.k=.5})();
 const lampSpots=[[-4,-2],[2,0],[5,3.5]];
 lampSpots.forEach(([x,z])=>{bx(.4,.4,.4,0xfff1c9,x,3.6,z,0,0xffd37a);const l=new THREE.PointLight(0xffd9a0,0,15);l.position.set(x,3.4,z);S.add(l);LAMPS.push(l);glow(x,3.55,z,2.2,0xffd37a)});
 
+/* ================= MYLES MINI MART: DIRECTLY BESIDE THE MAIN SHOP ================= */
+{
+const miniShell=new THREE.Group();S.add(miniShell);
+bx(7.2,.1,3,tm('pavers',5,1.9),-11.7,-.05,7.9,miniShell);
+bx(7.2,.2,12.2,tm('tile',3,2.5,{color:0xe5eadf}),-11.7,-.1,0,miniShell);
+wall(.2,3.2,12.4,-15.3,1.6,0,miniShell);wall(7.2,3.2,.2,-11.7,1.6,-6.1,miniShell);
+/* Public frontage with a clear glass shop door and display windows. */
+wall(2.45,.9,.2,-14.075,.45,6.1,miniShell);wall(2.45,.9,.2,-9.325,.45,6.1,miniShell);
+GL(2.45,2.3,-14.075,2.05,6.1,miniShell);GL(2.45,2.3,-9.325,2.05,6.1,miniShell);
+bx(.1,2.5,.12,GOLD,-11.7,1.25,5.05,miniShell);bx(.1,2.5,.12,GOLD,-11.7,1.25,6.2,miniShell);gb(.08,2.25,.95,-11.7,1.25,5.62,miniShell);
+sign('MYLES MINI MART','Groceries · snacks · cold drinks',4.2,.65,-11.7,2.85,6.2,miniShell,{bg:'#1b5e20',ac:'#b8e986'});
+/* West-wall partition separates the mart from the salon. */
+}
+let g=zone('market');
+/* Parallel grocery aisles, checkout counter, chilled drinks and produce shelves. */
+[-13.7,-11.9,-10.1].forEach((x,i)=>{bx(.72,1.75,4.6,0x8a6641,x,.9,-.25,g);bx(.78,.06,4.65,GOLD,x,1.82,-.25,g);for(let r=0;r<4;r++)for(let k=0;k<5;k++)bx(.36,.26,.38,pick([0xe53935,0xf9a825,0x43a047,0x1e88e5,0x8e24aa,0xf5f5f5]),x,.38+r*.39,-2.05+k*.9,g)});
+bx(2.3,.9,.72,NAVY,-12.4,.45,4.15,g);bx(2.35,.08,.78,GOLD,-12.4,.94,4.15,g);bx(.36,.28,.03,0x111,-12.4,1.16,3.76,g);bx(.3,.22,.03,0x4fc3f7,-12.4,1.16,3.73,g,0x1565c0);
+[-9.5,-8.8].forEach((x,i)=>{bx(.58,1.65,.65,0xe8f4ff,x,.82,3.8,g);bx(.52,1.35,.03,i?0x43a047:0x1565c0,x,.82,4.14,g);for(let r=0;r<4;r++)cy(.055,.2,pick([0xe53935,0x43a047,0xfdd835,0x1e88e5]),x,.3+r*.34,4.17,g)});
+bx(4.8,.08,.9,0xc89658,-11.7,.05,-4.65,g);for(let k=0;k<8;k++)cy(.09,.2,pick([0xe53935,0xfdd835,0x43a047]),-13.8+k*.6,.2,-4.65,g);
+put(g,0x43a047,true,-13.9,1.5,PI);put(g,GOLD,false,-12.4,1.4,0);
+
 /* ================= STATIONERY ================= */
-let g=zone('stat');
+g=zone('stat');
 for(let i=0;i<3;i++){const x=-6.3+i*3.1;bx(2.9,2.6,.5,WOODM,x,1.3,-5.7,g);for(let r=0;r<4;r++)bx(2.8,.06,.6,0x6e5236,x,.4+r*.62,-5.55,g)}
 {const it=[];for(let i=0;i<3;i++)for(let r=0;r<4;r++)for(let k=0;k<7;k++)it.push([.28,.34,.3,-6.3+i*3.1-1.15+k*.38,.6+r*.62,-5.5,pick(cols)]);
 for(let j=0;j<4;j++)for(let k=0;k<2;k++)it.push([.55,.13,.75,-.6+k*.7,.07+j*.13,-5.3,0xffffff]);
@@ -329,10 +354,13 @@ for(let k=0;k<7;k++){const x=-4.7+k*.45,c2=pick(cols);bx(.4,.5,.04,c2,x,1.45,2.6
 cy(.03,.8,0x555,-2.1,.4,1.4,g);cy(.25,.04,0x555,-2.1,.02,1.4,g);cy(.16,.7,0xeeeeee,-2.1,1.15,1.4,g);bx(.4,.45,.25,0xe53935,-2.1,1.2,1.4,g);
 bx(.55,1.6,.04,0xd81b60,-1.6,.8,2.4,g,0x5a0a28);bx(.5,.4,.5,0xc9a26b,-5.5,.2,1.2,g);bx(.5,.4,.5,0xc9a26b,-5.5,.6,1.2,g);put(g,GOLD,false,-3.8,1.3,PI);
 /* ================= SALON ANNEX ================= */
+const salonShellStart=S.children.length;
 bx(8,.1,3,tm('pavers',5,1.9),-14,-.05,7.9);bx(7.2,.2,12.2,tm('tile',3,2.5,{color:0xf2eef6}),-11.7,-.1,0);wall(.2,3.2,12.4,-15.3,1.6,0);wall(7.4,3.2,.2,-11.8,1.6,-6.1);
 wall(2.9,.9,.2,-9.55,.45,6.1);wall(2.9,.9,.2,-13.85,.45,6.1);GL(2.9,2.3,-9.55,2.05);GL(2.9,2.3,-13.85,2.05);GL(1.4,.7,-11.7,2.85);
 [-11,-12.4].forEach(x=>bx(.12,2.2,.12,NAVY,x,1.1,6.1));sign('SALON · BARBER · NAILS',null,1.5,.45,-11.7,2.55,6.2,0,{bg:'#00695c'});
+const salonShell=new THREE.Group();salonShell.position.x=-7.2;salonShell.add(...S.children.splice(salonShellStart));S.add(salonShell);
 g=zone('salon');
+g.position.x=-7.2;
 cy(.07,.9,0xffffff,-10.6,1.35,6.5,g);[0,1,2,3].forEach(k=>cy(.075,.12,0xdd0000,-10.6,1+k*.22,6.5,g));
 bx(5.8,.02,3.6,0x2a2a35,-12,.01,2.2,g);sign('SALON · BARBER · NAILS',null,2.4,.5,-11.7,2.8,.02,g,{bg:'#004d40',ac:'#26c6da'});NEON.push(bx(6.4,.06,.06,0x26c6da,-11.7,3,.02,g,0x26c6da).material);
 [-14.2,-12.9,-11.6].forEach((x,i)=>{bx(1.1,.9,.4,0x333,x,.45,.25,g);bx(1.2,.05,.45,0xdddddd,x,.92,.25,g);gb(1,1,.03,x,1.75,.04,g);
@@ -345,7 +373,7 @@ bx(.7,.45,1.8,0x7e57c2,-14.9,.25,2.9,g);bx(.15,.55,1.8,0x7e57c2,-15.15,.7,2.9,g)
 bx(1.4,1,.6,NAVY,-13.4,.5,5.3,g);bx(1.5,.06,.7,GOLD,-13.4,1.03,5.3,g);bx(.4,.3,.04,0x111111,-13.4,1.2,5.3,g);
 put(g,0x1e88e5,true,-14.2,1.6,PI);put(g,0x8e24aa,true,-11.6,1.6,PI);put(g,GOLD,false,-13.55,1.8,PI);put(g,GOLD,false,-10.95,1.8,PI);
 put(g,GOLD,true,-9.3,.8,0);put(g,0xe53935,true,-9.3,2.4,PI);put(g,GOLD,true,-9.3,3.1,0);put(g,GOLD,false,-13.4,4.55,0);
-{const l=new THREE.PointLight(0x9be8e0,0,12);l.position.set(-11.7,3,3);S.add(l);LAMPS.push(l);glow(-11.7,3,.1,3.5,0x26c6da,g)}
+{const l=new THREE.PointLight(0x9be8e0,0,12);l.position.set(-18.9,3,3);S.add(l);LAMPS.push(l);glow(-11.7,3,.1,3.5,0x26c6da,g)}
 /* ================= PHOTO STUDIO ANNEX ================= */
 {const cx=18.9;bx(8,.1,3,tm('pavers',5,1.9),22,-.05,7.9);
 bx(7.2,.2,12.2,tm('tile',3,2.5,{color:0xf0ece4}),cx,-.1,0);wall(.2,3.2,12.4,22.5,1.6,0);wall(7.4,3.2,.2,cx+.1,1.6,-6.1);
@@ -374,10 +402,12 @@ const sp=new THREE.Mesh(new THREE.PlaneGeometry(1.1,.7),new THREE.MeshStandardMa
 bx(3.4,1,.7,NAVY,1,.5,3.5,g);bx(3.5,.06,.8,GOLD,1,1.03,3.5,g);bx(.5,.34,.04,0x111,2.2,1.25,3.5,g);bx(.44,.28,.01,0x4fc3f7,2.2,1.25,3.52,g,0x1565c0);bx(.3,.02,.2,0x222,.2,1.07,3.4,g);
 sign('NETWORK · CCTV · SOLAR','routers · cameras · panels · batteries',3.3,.45,1,2.95,.5,g);put(g,GOLD,false,1,2.9,0);
 /* ================= TAILORING ANNEX (next to salon) ================= */
+const tailorShellStart=S.children.length;
 {const cx=-18.9;bx(8,.1,3,tm('pavers',5,1.9),-22,-.05,7.9);bx(7.2,.2,12.2,tm('tile',3,2,{color:0xe3ddd0}),cx,-.1,0);wall(.2,3.2,12.4,-22.5,1.6,0);wall(7.4,3.2,.2,cx-.1,1.6,-6.1);
 wall(2.8,.9,.2,cx-2.1,.45,6.1);wall(2.9,.9,.2,cx+2.15,.45,6.1);GL(2.8,2.3,cx-2.1,2.05);GL(2.9,2.3,cx+2.15,2.05);GL(1.4,.7,cx,2.85);
 [cx-.7,cx+.7].forEach(x=>bx(.12,2.2,.12,NAVY,x,1.1,6.1));sign('TAILORING · EMBROIDERY','uniforms · church wear · repairs',1.5,.5,cx,2.55,6.2,0,{bg:'#33691e'})}
-g=zone('tailor');g.position.set(-18.9,0,-5.6);g.rotation.y=PI;
+const tailorShell=new THREE.Group();tailorShell.position.x=-7.2;tailorShell.add(...S.children.splice(tailorShellStart));S.add(tailorShell);
+g=zone('tailor');g.position.set(-26.1,0,-5.6);g.rotation.y=PI;
 [-7.4,-8.6,-9.8].forEach((z,i)=>{tbl(-3,z,.7,1.1,g);bx(.38,.3,.2,0xdddddd,-3,.95,z,g);bx(.15,.14,.1,0xdddddd,-2.88,1.15,z,g);chair(-2.2,z,PI/2,g,0x33691e);if(i!==1)put(g,pick(cols),true,-2.25,z,-PI/2)});
 tbl(.3,-8.3,2.2,1.1,g);for(let k=0;k<3;k++)bx(1.4,.03,.9,pick([0x1565c0,0x2e7d32,0xb71c1c,0xf5f5f5]),.2+k*.0,.82+k*.03,-8.3,g);
 bx(.9,.6,.6,0xf0f0f0,2.8,.5,-9.8,g);bx(.5,.04,.35,0x555,2.8,.84,-9.8,g);[0,1,2,3,4,5].forEach(k=>cy(.04,.12,pick(cols),2.5+k*.12,.95,-10.1,g));chair(2.2,-9.8,PI/2,g,0x33691e);
@@ -385,7 +415,27 @@ bx(.5,1.5,1.4,WOODM,3.2,.75,-7.5,g);for(let r=0;r<3;r++)for(let k=0;k<3;k++){con
 [-1,.2].forEach((x,i)=>{cy(.03,.9,0x555,x,.45,-10.2,g);cy(.16,.5,pick([0x1565c0,0x2e7d32]),x,1.2,-10.2,g);cy(.07,.12,0xdddddd,x,1.55,-10.2,g)});
 [-3.3,-.8].forEach(x=>bx(.05,1.8,.05,0x555,x,.9,-10.7,g));bx(2.5,.04,.04,0x555,-2.05,1.75,-10.7,g);for(let k=0;k<5;k++){const x=-3.1+k*.45,c2=pick([0x1565c0,0x2e7d32,0xb71c1c,0xf5f5f5]);bx(.4,.6,.04,c2,x,1.4,-10.7,g)}
 bx(1.1,.04,.35,0x777,-1.2,.85,-6.9,g);[-.45,.45].forEach(o=>bx(.04,.85,.04,0x444,-1.2+o,.42,-6.9,g));
-{const l=new THREE.PointLight(0xfff0d0,0,12);l.position.set(-18.9,3,3);S.add(l);LAMPS.push(l);bx(.4,.4,.4,0xfff1c9,0,3.0,-8.6,g,0xffd37a);glow(0,2.95,-8.6,2.6,0xffd37a,g)}
+{const l=new THREE.PointLight(0xfff0d0,0,12);l.position.set(-26.1,3,3);S.add(l);LAMPS.push(l);bx(.4,.4,.4,0xfff1c9,0,3.0,-8.6,g,0xffd37a);glow(0,2.95,-8.6,2.6,0xffd37a,g)}
+/* ================= MYLES PUB & LOUNGE: FAR-LEFT END OF THE WEST WING ================= */
+{
+const pubShell=new THREE.Group();S.add(pubShell);
+bx(7.2,.1,3,tm('pavers',5,1.9),-33.3,-.05,7.9,pubShell);bx(7.2,.2,12.2,tm('tile',3,2.5,{color:0x443735}),-33.3,-.1,0,pubShell);
+wall(.2,3.2,12.4,-36.9,1.6,0);wall(7.2,3.2,.2,-33.3,1.6,-6.1);
+wall(2.5,.9,.2,-35.65,.45,6.1);wall(2.5,.9,.2,-30.95,.45,6.1);
+GL(2.5,2.3,-35.65,2.05);GL(2.5,2.3,-30.95,2.05);
+bx(.12,2.45,.12,GOLD,-34.3,1.23,6.1,pubShell);bx(.12,2.45,.12,GOLD,-32.3,1.23,6.1,pubShell);bx(2.1,.12,.12,GOLD,-33.3,2.48,6.1,pubShell);
+sign('MYLES PUB & LOUNGE','Food · drinks · music',4.4,.72,-33.3,3.05,6.2,pubShell,{bg:'#45234b',ac:'#f2c968'});
+}
+g=zone('pub');
+/* Bar, bottle display, high tables, booth seating and music corner. */
+bx(4.4,1.05,.8,WOODM,-33.3,.53,-4.85,g);bx(4.5,.08,.84,GOLD,-33.3,1.08,-4.85,g);[-35,-34,-33,-32,-31].forEach((x,i)=>{cy(.09,.38,pick([0x8e24aa,0x43a047,0xe53935,0xf9a825]),x,1.33,-4.85,g);bx(.15,.28,.12,0xdbe7f2,x,1.42,-4.85,g)});
+bx(4.5,1.65,.12,WOODM,-33.3,1.05,-5.8,g);for(let r=0;r<2;r++)for(let k=0;k<5;k++)cy(.11,.3,pick([0xe53935,0x43a047,0x1e88e5,0xf9a825]),-35.0+k*.85,.5+r*.65,-5.7,g);
+[-35.2,-31.4].forEach(x=>{bx(1.4,.62,2.2,0x422e42,x,.31,-1.4,g);bx(1.4,.56,.16,0x5b405b,x,.63,-2.42,g);tbl(x,-1.25,1.35,.8,g);chair(x,-.45,PI,g,0x5b405b);chair(x,-2.05,0,g,0x5b405b)});
+[-34.1,-32.3].forEach(x=>{cy(.45,.06,WOODM,x,.95,2.4,g);cy(.06,.92,0x333,x,.46,2.4,g);[-.28,.28].forEach(dx=>{chair(x+dx,1.75,PI,g,0x45234b);chair(x+dx,3.05,0,g,0x45234b)})});
+bx(2.5,.06,1.5,0x222,-33.3,2.2,4.3,g);bx(2.3,.04,1.3,0x263238,-33.3,1.1,4.3,g);bx(.55,1.2,.18,0x8e24aa,-33.3,1.75,4.25,g,0xce93d8);
+put(g,0xe0ac69,true,-30.4,1.6,PI);put(g,0x263238,true,-31.4,1.6,PI);
+sign('LOUNGE','Please drink responsibly',2.5,.48,-33.3,2.65,-.3,g,{bg:'#45234b',ac:'#f2c968'});
+
 /* ================= OUTDOOR CAFÉ + SNACK KIOSK ================= */
 g=zone('cafe');KEEP.add(Z.cafe.root);const DX=-18;
 const CT=new V(.5,0,10.4);cy(1.1,.07,GOLD,CT.x,.78,CT.z,g);cy(.1,.78,0x333,CT.x,.39,CT.z,g);cy(.5,.05,0x333,CT.x,.06,CT.z,g);
@@ -421,7 +471,7 @@ sign('MIKROTIK ROUTER · PoE SWITCH','Starlink in · access points out',2.25,.48
 /* ================= ROOF ================= */
 const roof=new THREE.Group();roof.userData.z='pop';S.add(roof);
 const RM_=(w,d)=>tm('roof',w/1.6,d/1.6,{roughness:.55,metalness:.35});
-const roofPanels=[],extraRoofs=[];roofPanels.push(bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof));[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.6,12.6,18.9,3.4,0],[7.6,12.6,-18.9,3.4,0]].forEach(([w,d,x,y,z])=>roofPanels.push(bx(w,.25,d,RM_(w,d),x,y,z,roof)));
+const roofPanels=[],extraRoofs=[];roofPanels.push(bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof));[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.6,12.6,18.9,3.4,0],[7.6,12.6,-18.9,3.4,0],[7.6,12.6,-26.1,3.4,0],[7.6,12.6,-33.3,3.4,0]].forEach(([w,d,x,y,z])=>roofPanels.push(bx(w,.25,d,RM_(w,d),x,y,z,roof)));
 {const sm=new THREE.MeshStandardMaterial({map:TEX.solar,roughness:.25,metalness:.5});MATS.push(sm);for(let i=0;i<12;i++){const p=bx(2,.06,1.2,sm,-5.3+(i%4)*3.5,4.45,-4.4+Math.floor(i/4)*2.6,roof);p.rotation.x=-.35}}
 /* Starlink dish uplinks to the POP router and switch. */
 {
@@ -437,11 +487,18 @@ roof.add(new THREE.Mesh(new THREE.TubeGeometry(cable,32,.035,6,false),M(0x24b8d0
 /* ================= SITE CONTEXT ================= */
 const site=new THREE.Group();S.add(site);KEEP.add(site);const roadTraffic=[];
 {const wallM=tm('plaster',14,1,{});WM.push;const cap=M(NAVY);
-const fenceH=1.6;[[7.5,-16,69,.3],[-27,0,.3,32.3],[42,0,.3,32.3]].forEach(([x,z,w,d])=>{bx(w,fenceH,d,tm('plaster',Math.max(w,d)/2.2,.7),x,fenceH/2,z,site);bx(w+.1,.12,d+.1,cap,x,fenceH+.06,z,site)});
-[[-14.4,25.2],[7,10.4],[25.25,14.5],[41.15,1.7]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});[-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
+const fenceH=1.6;[[-9,-16,102,.3],[-60,0,.3,32.3],[42,0,.3,32.3]].forEach(([x,z,w,d])=>{bx(w,fenceH,d,tm('plaster',Math.max(w,d)/2.2,.7),x,fenceH/2,z,site);bx(w+.1,.12,d+.1,cap,x,fenceH+.06,z,site)});
+[[ -39.05,5.9],[-28.75,3.5],[-14.4,25.2],[7,10.4],[25.25,14.5],[41.15,1.7]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});[-42,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
+/* A separate six-metre vehicle opening serves the added west-end parking. */
+[[-57.5,5],[-45.5,7]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});
+[-60,-55,-49,-42,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
+bx(6,.08,8,tm('asphalt',3,4,{bumpScale:.3}),-52,-.05,12.3,site);sign('LEFT PARKING · VEHICLE ENTRY','Five customer spaces · inside the perimeter',4.4,.58,-52,2.3,15.25,site,{bg:'#1A395B'});
+/* Five perpendicular customer bays in a dedicated paved area beyond the pub. */
+{const p=new THREE.Group();site.add(p);bx(17,.1,11.5,tm('asphalt',8.5,5.75,{bumpScale:.3}),-51.5,-.05,4.75,p);for(let x=-60;x<=-43;x+=3.4)bx(.1,.01,5.2,0xffffff,x,.01,5.1,p);bx(17,.01,.1,0xffffff,-51.5,.01,2.5,p);bx(17,.01,.1,0xffffff,-51.5,.01,7.7,p);[-58.3,-54.9,-51.5,-48.1,-44.7].forEach((x,i)=>car(x,5.1,PI/2,[0xe53935,0x1e88e5,0xeeeeee,0x424242,0xfdd835][i],p));[-59.5,-43.5].forEach(x=>{cy(.05,3,0x444,x,1.5,8.7,p);bx(.55,.14,.55,0xfff1c9,x,3.05,8.7,p,0xffd37a);glow(x,3,8.7,2.4,0xffd9a0,p)});sign('CUSTOMER PARKING','5 spaces · beyond the pub',2.7,.52,-51.5,2.45,8.4,p,{bg:'#1A395B'});}
+bx(5.6,.08,14.4,tm('pavers',2.5,7,{color:0x8e897d}),-33.3,-.045,9.0,site);bx(5.3,.05,4.2,0x755a6d,-33.3,.02,15.7,site);sign('PUB WALK-IN GATE','Pedestrian access · no vehicle traffic',4,.56,-33.3,2.25,15.35,site,{bg:'#45234b',ac:'#f2c968'});
 /* Road-facing fuel entrance: wide open gate with a paved apron directly into the forecourt. */
 bx(7.8,.08,5.4,tm('asphalt',4,3,{bumpScale:.3}),36.4,-.05,18.0,site);sign('MYLES FUEL · OPEN ENTRY','Direct access from the road',3.2,.55,36.4,2.4,15.3,site,{bg:'#c64b22',ac:'#ffe08a'});
-const trees=[[-22,-12],[-14,-14],[-5,-14.5],[8,-14.5],[16,-13.5],[-24.8,-5],[-24.8,-9.5]];
+const trees=[[-22,-12],[-14,-14],[-5,-14.5],[8,-14.5],[16,-13.5]];
 const gm=[M(0x3f7d3a),M(0x4c8f43),M(0x356f33)],trunk=M(0x5d4037),ico=new THREE.IcosahedronGeometry(1,1),tg=new THREE.CylinderGeometry(.18,.28,1,8);
 trees.forEach(([x,z],i)=>{const t=new THREE.Group();t.position.set(x,0,z);const h=2.6+rnd()*1.6,tr=new THREE.Mesh(tg,trunk);tr.scale.y=h;tr.position.y=h/2;tr.castShadow=true;t.add(tr);
 [[0,h+.9,0,1.9],[.8,h+.4,.3,1.4],[-.7,h+.3,-.3,1.5]].forEach(([a,b,c,s],j)=>{const f=new THREE.Mesh(ico,gm[(i+j)%3]);f.position.set(a,b,c);f.scale.set(s,s*.85,s);f.castShadow=true;t.add(f)});t.userData.i=i;site.add(t)});site.userData.trees=site.children.filter(o=>o.userData.i!==undefined);
@@ -455,14 +512,14 @@ const addTraffic=(kind,x,z,speed,color)=>{const group=kind==='car'?car(x,z,speed
 const lamp=(x,z,c)=>glow(x,3,z,2.4,c||0xfff0d0);
 const bottles=(h,x0,y,z,n,gap)=>{for(let k=0;k<n;k++)cy(.06,.28,pick([0xe53935,0x1e88e5,0xfdd835,0x8e24aa,0x43a047,0xf5f5f5]),x0+k*gap,y,z,h)};
 /* SALON back half */
-{const cx=-11.7,h=ZH('salon');bx(5.6,.02,4.4,0x00897b,cx,.01,-3.5,h);
+{const cx=-11.7,h=ZH('salon');h.position.x=-7.2;bx(5.6,.02,4.4,0x00897b,cx,.01,-3.5,h);
 bx(5.6,2.1,.35,WOODM,cx,1.05,-5.8,h);[.5,1.1,1.7].forEach(y=>{bx(5.4,.05,.4,0x6e5236,cx,y,-5.7,h);bottles(h,cx-2.5,y+.17,-5.7,14,.38)});
 [-2.4,-1.2].forEach(dx=>{bx(.9,.08,.6,0xffffff,cx+dx,.95,-4.5,h);cy(.04,.9,0x777,cx+dx,.45,-4.5,h);chair(cx+dx,-3.4,PI,h,0x00897b)});
 [0,1,2].forEach(i=>{const x=cx+.4+i*1.0;chair(x,-1.2,PI,h,0x26a69a);cy(.04,1.7,0x777,x,.85,-2.4,h);cy(.34,.18,0xb0bec5,x,1.8,-2.4,h);bx(.5,.3,.5,0xeeeeee,x,1.65,-2.4,h)});
 tbl(cx+1.9,-4.3,1.6,.7,h);[-.5,.5].forEach(o=>{chair(cx+1.9+o,-3.5,PI,h,0xec407a);bx(.1,.12,.1,pick([0xe53935,0xec407a,0x8e24aa]),cx+1.9+o,.95,-4.3,h)});put(h,0xec407a,true,cx+1.4,-3.5,PI);
 bx(1.8,.5,.7,0xb39ddb,cx-2.4,.25,-.8,h);bx(1.8,.6,.15,0xb39ddb,cx-2.4,.6,-1.1,h);bx(.8,.04,.5,0xd7ccc8,cx-.2,.35,-.6,h);lamp(cx,-3,0x9be8e0)}
 /* TAILORING back half */
-{const cx=-18.9,h=ZH('tailor');bx(5.8,.02,4.6,0x7cb342,cx,.01,-3.4,h);
+{const cx=-18.9,h=ZH('tailor');h.position.x=-7.2;bx(5.8,.02,4.6,0x7cb342,cx,.01,-3.4,h);
 [-2.2,-.8,.6].forEach(dx=>{tbl(cx+dx,-4.9,.9,.8,h);bx(.4,.3,.2,0xdddddd,cx+dx,.95,-4.9,h);chair(cx+dx,-4.1,PI,h,0x33691e)});put(h,0x33691e,true,cx-.8,-4.1,PI);
 bx(.9,2.3,.06,0x6a1b9a,cx+2.7,1.15,-1.2,h);bx(.9,2.3,.06,0x6a1b9a,cx+2.7,1.15,-3.2,h);bx(.06,2.3,2.1,0x8e24aa,cx+3.1,1.15,-2.2,h);bx(.9,.02,2,0xd7ccc8,cx+2.7,.01,-2.2,h);
 [-1.8,-.9,0].forEach((dx,i)=>{const x=cx+dx,c=pick([0x1565c0,0x2e7d32,0xb71c1c,0xfdd835]);cy(.03,1.5,0x555,x,.75,-1.4,h);cy(.17,.55,c,x,1.3,-1.4,h);cy(.09,.14,0xe0c9a6,x,1.68,-1.4,h);cy(.2,.03,0x555,x,.02,-1.4,h)});
@@ -587,8 +644,8 @@ const ap=new THREE.Group();ap.position.set(x,y,z);ap.rotation.x=tilt;parent.add(
 cy(size,.09,0xf4f6f8,0,0,0,ap);cy(size*.78,.018,0xe2e8ee,0,.052,0,ap);
 const halo=new THREE.Mesh(new THREE.TorusGeometry(size*.76,.025,8,32),M(0x278be0));halo.rotation.x=PI/2;halo.position.y=.063;ap.add(halo);
 cy(size*.13,.02,0x3a8fe2,0,.067,0,ap,0x135fae);return ap}
-const roomAPs=[['stat','Stationery'],['desk','Digital teller'],['vouch','WiFi counter'],['momo','Mobile money'],['browse','Cyber lab'],['chg','Phone charging'],['game','PS5 lounge'],['tee','T-shirt studio'],['salon','Salon'],['cold','Cold storage'],['pop','Network room'],['net','Network shop'],['photo','Photo studio'],['tailor','Tailoring']];
-roomAPs.forEach(([id])=>{const d=ZD[id],y=['game','salon','photo','tailor'].includes(id)?2.85:3.55;apPuck(networkVisuals,{x:d.x,y,z:d.z,size:.28})});
+const roomAPs=[['stat','Stationery'],['desk','Digital teller'],['vouch','WiFi counter'],['momo','Mobile money'],['browse','Cyber lab'],['market','Mini mart'],['chg','Phone charging'],['game','PS5 lounge'],['tee','T-shirt studio'],['salon','Salon'],['cold','Cold storage'],['pop','Network room'],['net','Network shop'],['photo','Photo studio'],['tailor','Tailoring'],['pub','Pub & lounge']];
+roomAPs.forEach(([id])=>{const d=ZD[id],y=['game','salon','photo','tailor','pub'].includes(id)?2.85:3.55;apPuck(networkVisuals,{x:d.x,y,z:d.z,size:.28})});
 /* Ruijie weatherproof outdoor access point, mounted high for whole-compound coverage. */
 const outdoorAP=new THREE.Group();outdoorAP.position.set(3.5,0,9.3);networkVisuals.add(outdoorAP);
 cy(.1,5.4,0x555,0,2.7,0,outdoorAP);cy(.22,.12,0x333,0,.06,0,outdoorAP);
@@ -613,14 +670,14 @@ const SHOPLB=document.createElement('div');SHOPLB.className='lbl m';SHOPLB.textC
 /* ================= STATE, CAMERA ================= */
 const st={roof:1,xray:0,night:0,people:1,wifi:1,network:1,labels:1,steam:1,tour:0,measure:0};
 let sel=null,phase=4,nightT=0,Q='high',qAuto=true,pres=null;
-const c={t:new V(2,1,0),th:.2,ph:.82,r:50},gl2={t:new V(2,1,0),th:.2,ph:.82,r:50};
-const OV={th:.2,ph:.82,r:50};
-function fly(id,instant){if(!id||id==='all'){sel=null;gl2.t.set(2,1,0);gl2.th=OV.th;gl2.ph=OV.ph;gl2.r=OV.r}else{const z=ZD[id];sel=id;gl2.t.set(z.x,z.ty,z.z);gl2.th=z.th;gl2.ph=z.ph;gl2.r=z.r}
+const c={t:new V(-9,1,-1),th:.2,ph:.82,r:68},gl2={t:new V(-9,1,-1),th:.2,ph:.82,r:68};
+const OV={th:.2,ph:.82,r:68};
+function fly(id,instant){if(!id||id==='all'){sel=null;gl2.t.set(-9,1,-1);gl2.th=OV.th;gl2.ph=OV.ph;gl2.r=OV.r}else{const z=ZD[id];sel=id;gl2.t.set(z.x,z.ty,z.z);gl2.th=z.th;gl2.ph=z.ph;gl2.r=z.r}
 if(instant||RM){c.t.copy(gl2.t);c.th=gl2.th;c.ph=gl2.ph;c.r=gl2.r}
 info();document.querySelectorAll('#zones button').forEach(b=>b.classList.toggle('on',b.dataset.id===(sel||'all')));
 ids.forEach(k=>padStyle(k));hashW()}
 function padStyle(k){const z=Z[k];z.pad.material.opacity=z.ghost?(k===sel?.35:.12):(k===sel?.7:.28)}
-function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers enter through the main door and check in at the secure teller counter. Cyber, printing-service and class visitors then use the indoor lab door; the cyber room stays open inside but separate from staff stock. Starlink feeds the POP rack, one Ubiquiti ceiling access point serves each room, and a Ruijie outdoor AP covers the compound, café and parking. The petrol station has a dedicated wide opening and driveway from the road. The car wash sits between the fuel pumps and a plaza-facing repair garage at the back-right corner. The garage includes open vehicle bays and an internal spare-parts shop. Roofs and the rooftop dish are shown by default. Pick a zone above, use the phase filter, or click anything.';return}
+function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers enter through the main door and check in at the secure teller counter. The mini mart is the next room beside stationery and cyber services, with a supervised lobby connection. The salon and tailoring rooms continue the west wing to Myles Pub & Lounge at the far-left end, served by its own pedestrian gate. A separate five-space customer parking area sits beyond the pub with direct vehicle access from the road. Cyber and class visitors use the indoor lab door. Starlink feeds the POP rack, one Ubiquiti ceiling access point serves each room, and a Ruijie outdoor AP covers the compound, café and parking. The petrol station has a dedicated wide opening and driveway from the road. The car wash sits between the fuel pumps and a plaza-facing repair garage at the back-right corner. The garage includes open vehicle bays and an internal spare-parts shop. Roofs and the rooftop dish are shown by default. Pick a zone above, use the phase filter, or click anything.';return}
 const z=ZD[sel];e.innerHTML='<h2>'+z.name+'</h2><span class="badge">'+PH[z.phase]+'</span><span class="badge">'+(TIER[z.tier])+' cost</span><br>'+z.desc+'<br><b>Access:</b> '+ACC[z.access]+'<br><b>Income:</b> '+z.rev+'<br><b>Startup:</b> '+z.cost}
 function setPhase(p){phase=p;ids.forEach(k=>{const z=Z[k],gh=z.phase>p;z.ghost=gh;z.g.visible=!gh;z.ol.visible=gh;z.mo.visible=!!st.measure&&!gh;padStyle(k)});
 document.querySelectorAll('#phs button').forEach(b=>b.classList.toggle('on',+b.dataset.p===p));
@@ -719,7 +776,7 @@ if(st.wifi)rings.forEach((m,i)=>{const s=(t*.3+i/3)%1;m.scale.setScalar(.4+s*9);
 if(st.steam&&!RM)puffs.forEach(p=>{const s=(t*.4+p.userData.o)%1;p.position.set(p.userData.x+Math.sin(t*3+p.userData.o*9)*.02,p.userData.y+s*.5,p.userData.z);p.material.opacity=(1-s)*.45;p.scale.setScalar(1+s*1.5)});
 if(nightT>.3&&!RM)NEON.forEach((m,i)=>{m.emissiveIntensity=1.6+Math.sin(t*9+i*3)*.12+(Math.sin(t*31+i)>.97?-.6:0)});
 LEDS.forEach(l=>l.material.emissiveIntensity=Math.sin(t*5+l.userData.k*1.7)>-.2?1:.15);
-roadTraffic.forEach(v=>{v.group.position.x+=v.speed*dt;if(v.speed>0&&v.group.position.x>47)v.group.position.x=-47;else if(v.speed<0&&v.group.position.x< -47)v.group.position.x=47});
+roadTraffic.forEach(v=>{v.group.position.x+=v.speed*dt;if(v.speed>0&&v.group.position.x>67)v.group.position.x=-67;else if(v.speed<0&&v.group.position.x< -67)v.group.position.x=67});
 walkers.forEach(w=>{const off=w.f.userData.off;w.f.visible=!off;if(off||!st.people)return;const tg=N[w.to];tmp.set(tg[0]-w.f.position.x,0,tg[1]-w.f.position.z);const d=tmp.length();
 if(d<.1){const nx=N[w.to][2].filter(k=>k!==w.n);w.n=w.to;w.to=pick(nx.length?nx:N[w.to][2])}else{tmp.normalize();w.f.position.addScaledVector(tmp,.03*w.sp*dt*60);w.f.rotation.y=Math.atan2(tmp.x,tmp.z);const ph=t*8*w.sp,u=w.f.userData;u.legs[0].rotation.x=Math.sin(ph)*.6;u.legs[1].rotation.x=-Math.sin(ph)*.6;u.arms[0].rotation.x=-Math.sin(ph)*.5;u.arms[1].rotation.x=Math.sin(ph)*.5;w.f.position.y=Math.abs(Math.sin(ph))*.03}});
 if(st.labels||st.measure){ZONES.forEach((z,i)=>{const l=LB[i];if(!st.labels){l.style.display='none';return}
