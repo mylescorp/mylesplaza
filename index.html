@@ -731,8 +731,8 @@ sign('MOTORBIKES · CARS · BICYCLES','Repairs and servicing',2.8,.5,35.4,2.28,-
 
 /* ================= WALKERS, EFFECTS ================= */
 const people=new THREE.Group();S.add(people);
-const N=[[-9.5,7.9,[1,9]],[-3,7.9,[0,2]],[2,7.9,[1,3]],[-5.95,7.4,[2,4]],[-2.4,5,[3,5]],[3.5,2,[4]],[11.7,7.4,[7]],[11.7,5,[6,8]],[10.75,3.4,[7]],[-11.7,7.4,[0,10]],[-11.7,4.6,[9,11]],[-10.3,3,[10]],[18.9,7.4,[13]],[18.9,5,[12,14]],[17.6,3.4,[13]]];
-N.forEach(n=>n[1]-=SH);N.push([-5.95,10,[16]],[-5.95,6.1,[15,1]]);N[1][2].push(16);
+const N=[[-9.5,7.9,[1,9]],[-3,7.9,[0,2]],[2,7.9,[1,3]],[-5.95,7.4,[2,4]],[-2.4,5,[3,5]],[2.4,2.75,[4,17]],[11.7,7.4,[7]],[11.7,5,[6,8]],[10.75,3.4,[7]],[-11.7,7.4,[0,10]],[-11.7,4.6,[9,11]],[-10.3,3,[10]],[18.9,7.4,[13]],[18.9,5,[12,14]],[17.6,3.4,[13]]];
+N.forEach(n=>n[1]-=SH);N.push([-5.95,10,[16]],[-5.95,6.1,[15,1]],[3.5,2.75,[5]]);N[1][2].push(16);
 const walkers=[0,2,4,6,9,12,1,3,15].map(n=>{const f=fig(pick(cols));f.position.set(N[n][0],0,N[n][1]);people.add(f);return{f,n,to:N[n][2][0],sp:.9+rnd()*.5}});
 const wifi=new THREE.Group();S.add(wifi);
 const rings=[0,1,2].map(()=>{const m=new THREE.Mesh(new THREE.RingGeometry(.96,1,64),new THREE.MeshBasicMaterial({color:GOLD,transparent:true,side:2,depthWrite:false}));m.rotation.x=-PI/2;m.position.copy(ROUTER);wifi.add(m);return m});
@@ -761,10 +761,10 @@ const pubCoverage=new THREE.Mesh(new THREE.CircleGeometry(24,80),new THREE.MeshB
 sign('PUB COURTYARD WIFI AP','Pub · lounge · covered patio',3.1,.48,-41.5,5.75,-9.8,networkVisuals,{bg:'#173d64',ac:'#57d6e5'});
 /* The highlighted public route runs from the main entrance to the teller, then to the indoor cyber door. */
 {
-const route=new THREE.Group();S.add(route);const pts=[new V(-5.95,.065,8.1),new V(-5.95,.065,2.15),new V(-5.95,.065,1.0),new V(-2.4,.065,1.0),new V(1.8,.065,1.0),new V(2.65,.065,.8),new V(2.65,.065,-1.55),new V(3.2,.065,-1.1)];
+const route=new THREE.Group();S.add(route);const pts=[new V(-5.95,.065,8.1),new V(-5.95,.065,2.15),new V(-5.95,.065,1.0),new V(-2.4,.065,1.0),new V(1.8,.065,1.0),new V(2.65,.065,.8),new V(2.65,.065,-1.2),new V(3.275,.065,-1.2),new V(3.5,.065,-1.2)];
 const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineDashedMaterial({color:0xf4be48,dashSize:.48,gapSize:.28,transparent:true,opacity:.9}));line.computeLineDistances();route.add(line);
-bx(.2,.035,5.7,0xf4be48,-5.95,.055,5.1,route);bx(3.55,.035,.2,0xf4be48,-4.15,.055,1.0,route);bx(4.2,.035,.2,0xf4be48,-.3,.055,1.0,route);bx(.2,.035,2.3,0x32c9de,2.65,.055,-.35,route);bx(.55,.035,.2,0x32c9de,2.925,.055,-1.1,route);
-[[ -4.1,1.0,'z'],[-.3,1.0,'x'],[2.65,-.8,'z']].forEach(([x,z,dir],i)=>{const arrow=new THREE.Mesh(new THREE.ConeGeometry(.15,.34,3),M(i===2?0x32c9de:0xf4be48));arrow.rotation.x=dir==='z'?-PI/2:0;arrow.rotation.z=dir==='x'?-PI/2:0;arrow.position.set(x,.1,z);route.add(arrow)});
+bx(.2,.035,5.7,0xf4be48,-5.95,.055,5.1,route);bx(3.55,.035,.2,0xf4be48,-4.15,.055,1.0,route);bx(4.2,.035,.2,0xf4be48,-.3,.055,1.0,route);bx(.2,.035,2.0,0x32c9de,2.65,.055,-.2,route);bx(.65,.035,.2,0x32c9de,2.9625,.055,-1.2,route);
+[[ -4.1,1.0,'z'],[-.3,1.0,'x'],[2.65,-.7,'z'],[2.9625,-1.2,'x']].forEach(([x,z,dir],i)=>{const arrow=new THREE.Mesh(new THREE.ConeGeometry(.15,.34,3),M(i>=2?0x32c9de:0xf4be48));arrow.rotation.x=dir==='z'?-PI/2:0;arrow.rotation.z=dir==='x'?-PI/2:0;arrow.position.set(x,.1,z);route.add(arrow)});
 }
 
 /* ================= LABELS ================= */
