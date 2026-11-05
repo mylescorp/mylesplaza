@@ -85,8 +85,8 @@ const ZONES=[
  desc:'A separate annex with its own street door. Barbershop for cuts and shaves, a ladies’ hair station, two nail tables, a wash basin, and a waiting sofa with reception. Clients book at reception and never enter the shop.',rev:'Per service, plus walk-ins and bookings',cost:'Medium: chairs, mirrors, dryers, clippers, nail supplies'},
 {id:'cafe',name:'Outdoor WiFi café & snack kiosk',short:'Outdoor WiFi café',color:0xe53935,phase:1,tier:'low',access:'outdoor',x:-14.7,z:11.7,w:23.5,d:8.4,ty:.8,th:.25,ph:.6,r:19,
  desc:'Round table and benches outside the shop, under one big shade on the left of the front yard, well clear of every entrance. Eight round tables and benches seat about 36 people, and free customer parking is on the right. Customers buy a drink at the counter and use your WiFi outdoors, so nobody has to come inside. A snack kiosk beside it sells chips, samosas, mandazi, juice, soda and hot drinks, stocked from the chiller.',rev:'Drink and snack sales plus WiFi upsell',cost:'Low: tables, chairs, benches, one big shade, kiosk counter'},
-{id:'wash',name:'Car wash bay',short:'Car wash',color:0x29b6f6,phase:2,tier:'medium',access:'outdoor',x:24.8,z:-11.1,w:4.1,d:9.2,ty:.7,th:0,ph:.7,r:13,
- desc:'A dedicated covered single-car wash bay at the far rear boundary of the compound, clear of the plaza entrance and customer parking approach. It includes a floor drain, pressure washer and water storage.',rev:'Per wash, with interior cleaning add-ons',cost:'Medium: pressure washer, tank, drainage and canopy'},
+{id:'wash',name:'Car wash bay',short:'Car wash',color:0x29b6f6,phase:2,tier:'medium',access:'outdoor',x:24.8,z:.5,w:4.1,d:9.2,ty:.7,th:0,ph:.7,r:13,
+ desc:'A covered single-car wash bay sits directly behind the customer parking stalls, against the inside of the right perimeter wall. Its entry faces the parking lot and stays clear of the plaza entrance. It includes a floor drain, pressure washer and water storage.',rev:'Per wash, with interior cleaning add-ons',cost:'Medium: pressure washer, tank, drainage and canopy'},
 {id:'cold',name:'Cold storage & drinks chiller',short:'Cold storage',color:0x039be5,phase:1,tier:'high',access:'staff-only',x:5.7,z:-5.2,w:4.2,d:1.8,ty:1,th:0,ph:.9,r:8.5,
  desc:'Chest freezers for fish, milk and drinks rental, plus a chiller that stocks the outdoor café. The drinks chiller runs from Phase 1; freezer rental starts in Phase 4, once the solar setup is proven.',rev:'Rental per kg or per day',cost:'High: needs oversized solar power'},
 {id:'pop',name:'POP rack, UPS & mast',short:'POP rack',color:0x546e7a,phase:1,tier:'medium',access:'staff-only',x:7.3,z:-3.6,w:1.6,d:2.8,ty:1.4,th:-1.1,ph:.9,r:8,
@@ -507,7 +507,7 @@ bx(2.4,.01,4.2,0x1565c0,sx(0),.007,7.9,lot);bx(.8,.01,.8,0xffffff,sx(0),.01,7.9,
 const cc=[0xe53935,0x1e88e5,0xeeeeee,0x424242,0xfdd835];[1,2,4,5,6].forEach((k,n)=>window.CARF(sx(k),7.9,PI/2,cc[n]));
 [[8.6,10.5],[26.5,10.5],[21,15.4]].forEach(([x,z])=>{cy(.06,4,0x444,x,2,z,lot);bx(.5,.2,.5,0xfff1c9,x,4.05,z,lot,0xffd37a);lamp(x,z,0xffd9a0)});
 cy(.05,2.6,0x555,19.6,1.3,15.3,lot);sign('PARKING','free for customers',2,.55,19.6,2.8,15.3,lot,{bg:'#1A395B'});
-/* covered single-car wash bay at the far rear boundary, clear of the front entrance */
+/* covered single-car wash bay behind the parking lot, inside the right perimeter wall */
 {const w=zone('wash');w.position.set(0,0,0);const x=ZD.wash.x,z=ZD.wash.z;
 bx(3.9,.12,8.8,tm('tile',3,2,{color:0x89949a}),x,-.015,z,w);bx(3.65,.025,8.4,tm('stripe',2,1,{transparent:false,opacity:1,side:2,roughness:.8}),x,.06,z,w);
 /* roof slab and four steel supports */
@@ -520,7 +520,7 @@ bx(.16,.02,8.1,0x3f5057,x+2.1,.08,z,w);for(let k=-3;k<=3;k++)bx(.18,.025,.11,0x2
 bx(.65,.9,.55,NAVY,x-1.7,.52,z+3.65,w);bx(.5,.08,.38,0x54c5e8,x-1.7,1.02,z+3.65,w);cy(.48,1.5,0x2b8baa,x+1.65,.8,z+3.55,w);cy(.5,.08,0x8de1f2,x+1.65,1.57,z+3.55,w);
 cy(.32,.08,0x333,x-1.65,2.2,z+2.8,w);cy(.04,.5,0x333,x-1.65,2.2,z+2.8,w);
 /* wash-ready car centered in the bay */
-CARF(x,z-1.2,0,0xe53935);sign('CAR WASH','rear compound wash bay',2.4,.55,x,2.8,z+4.5,w,{bg:'#14536b'})}}
+CARF(x,z-1.2,0,0xe53935);sign('CAR WASH','entry from customer parking',2.4,.55,x,2.8,z+4.5,w,{bg:'#14536b'})}}
 
 /* ================= WALKERS, EFFECTS ================= */
 const people=new THREE.Group();S.add(people);
