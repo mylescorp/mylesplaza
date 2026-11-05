@@ -103,8 +103,8 @@ const ZONES=[
  desc:'A third annex with its own street door: passport photos, events, graduation shots and framing. It extends the digital services desk and the T-shirt printing. Clients book at the reception and never enter the shop.',rev:'Per session, seasonal peaks',cost:'Low: camera, lights, backdrop'},
 {id:'tailor',name:'Tailoring & embroidery',short:'Tailoring',color:0xc0ca33,phase:3,tier:'low-medium',access:'staff-only',x:-26.1,z:0,w:7,d:12.2,ty:1,th:-.5,ph:.85,r:10,
  desc:'Staff workshop in the left annex, right next to the salon, so the two skilled-trade lines share one side of the building. School uniforms, church wear and repairs, plus embroidery. It pairs with T-shirt branding for bulk uniform orders, and orders are taken at the front counter.',rev:'Per order, strong on bulk uniforms',cost:'Low to medium: machines and a skilled tailor'},
-{id:'pub',name:'Myles Pub & Lounge',short:'Pub & lounge',color:0x8e24aa,phase:4,tier:'medium',access:'own-door',x:-33.3,z:0,w:7.2,d:12.2,ty:1,th:0,ph:1.42,r:15,
- desc:'A separate pub and lounge at the far-left end of the new west wing, with its own entrance and a pedestrian gate from the road. A bar, booth seating, high tables and a small music corner keep evening customers away from the service counters and vehicle lanes.',rev:'Food and drink sales, plus events',cost:'Medium: bar fit-out, seating, permits and opening stock'}
+{id:'pub',name:'Myles Pub & Lounge',short:'Pub & lounge',color:0x8e24aa,phase:4,tier:'medium',access:'own-door',x:-56.4,z:-5.9,w:7.2,d:12.2,ty:1,th:0,ph:1.42,r:15,
+ desc:'A fully separate pub at the far back-left corner of the compound. Its rear and left walls meet the compound boundaries, with a dedicated pedestrian gate and paved path to its own entrance. A bar, booth seating, high tables and a music corner keep evening customers away from the service counters and vehicle lanes.',rev:'Food and drink sales, plus events',cost:'Medium: bar fit-out, seating, permits and opening stock'}
 ];
 const ZD={};ZONES.forEach(z=>ZD[z.id]=z);const ids=ZONES.map(z=>z.id);
 
@@ -418,15 +418,16 @@ bx(1.1,.04,.35,0x777,-1.2,.85,-6.9,g);[-.45,.45].forEach(o=>bx(.04,.85,.04,0x444
 {const l=new THREE.PointLight(0xfff0d0,0,12);l.position.set(-26.1,3,3);S.add(l);LAMPS.push(l);bx(.4,.4,.4,0xfff1c9,0,3.0,-8.6,g,0xffd37a);glow(0,2.95,-8.6,2.6,0xffd37a,g)}
 /* ================= MYLES PUB & LOUNGE: FAR-LEFT END OF THE WEST WING ================= */
 {
-const pubShell=new THREE.Group();S.add(pubShell);
+const pubShell=new THREE.Group();S.add(pubShell);const pubWallStart=S.children.length;
 bx(7.2,.1,3,tm('pavers',5,1.9),-33.3,-.05,7.9,pubShell);bx(7.2,.2,12.2,tm('tile',3,2.5,{color:0x443735}),-33.3,-.1,0,pubShell);
 wall(.2,3.2,12.4,-36.9,1.6,0);wall(7.2,3.2,.2,-33.3,1.6,-6.1);
 wall(2.5,.9,.2,-35.65,.45,6.1);wall(2.5,.9,.2,-30.95,.45,6.1);
 GL(2.5,2.3,-35.65,2.05);GL(2.5,2.3,-30.95,2.05);
 bx(.12,2.45,.12,GOLD,-34.3,1.23,6.1,pubShell);bx(.12,2.45,.12,GOLD,-32.3,1.23,6.1,pubShell);bx(2.1,.12,.12,GOLD,-33.3,2.48,6.1,pubShell);
 sign('MYLES PUB & LOUNGE','Food · drinks · music',4.4,.72,-33.3,3.05,6.2,pubShell,{bg:'#45234b',ac:'#f2c968'});
+pubShell.add(...S.children.splice(pubWallStart));pubShell.position.set(-23.1,0,-5.9);
 }
-g=zone('pub');
+g=zone('pub');g.position.set(-23.1,0,-5.9);
 /* Bar, bottle display, high tables, booth seating and music corner. */
 bx(4.4,1.05,.8,WOODM,-33.3,.53,-4.85,g);bx(4.5,.08,.84,GOLD,-33.3,1.08,-4.85,g);[-35,-34,-33,-32,-31].forEach((x,i)=>{cy(.09,.38,pick([0x8e24aa,0x43a047,0xe53935,0xf9a825]),x,1.33,-4.85,g);bx(.15,.28,.12,0xdbe7f2,x,1.42,-4.85,g)});
 bx(4.5,1.65,.12,WOODM,-33.3,1.05,-5.8,g);for(let r=0;r<2;r++)for(let k=0;k<5;k++)cy(.11,.3,pick([0xe53935,0x43a047,0x1e88e5,0xf9a825]),-35.0+k*.85,.5+r*.65,-5.7,g);
@@ -471,7 +472,7 @@ sign('MIKROTIK ROUTER · PoE SWITCH','Starlink in · access points out',2.25,.48
 /* ================= ROOF ================= */
 const roof=new THREE.Group();roof.userData.z='pop';S.add(roof);
 const RM_=(w,d)=>tm('roof',w/1.6,d/1.6,{roughness:.55,metalness:.35});
-const roofPanels=[],extraRoofs=[];roofPanels.push(bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof));[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.6,12.6,18.9,3.4,0],[7.6,12.6,-18.9,3.4,0],[7.6,12.6,-26.1,3.4,0],[7.6,12.6,-33.3,3.4,0]].forEach(([w,d,x,y,z])=>roofPanels.push(bx(w,.25,d,RM_(w,d),x,y,z,roof)));
+const roofPanels=[],extraRoofs=[];roofPanels.push(bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof));[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.6,12.6,18.9,3.4,0],[7.6,12.6,-18.9,3.4,0],[7.6,12.6,-26.1,3.4,0],[7.6,12.6,-56.4,3.4,-5.9]].forEach(([w,d,x,y,z])=>roofPanels.push(bx(w,.25,d,RM_(w,d),x,y,z,roof)));
 {const sm=new THREE.MeshStandardMaterial({map:TEX.solar,roughness:.25,metalness:.5});MATS.push(sm);for(let i=0;i<12;i++){const p=bx(2,.06,1.2,sm,-5.3+(i%4)*3.5,4.45,-4.4+Math.floor(i/4)*2.6,roof);p.rotation.x=-.35}}
 /* Starlink dish uplinks to the POP router and switch. */
 {
@@ -488,14 +489,15 @@ roof.add(new THREE.Mesh(new THREE.TubeGeometry(cable,32,.035,6,false),M(0x24b8d0
 const site=new THREE.Group();S.add(site);KEEP.add(site);const roadTraffic=[];
 {const wallM=tm('plaster',14,1,{});WM.push;const cap=M(NAVY);
 const fenceH=1.6;[[-9,-16,102,.3],[-60,0,.3,32.3],[42,0,.3,32.3]].forEach(([x,z,w,d])=>{bx(w,fenceH,d,tm('plaster',Math.max(w,d)/2.2,.7),x,fenceH/2,z,site);bx(w+.1,.12,d+.1,cap,x,fenceH+.06,z,site)});
-[[ -39.05,5.9],[-28.75,3.5],[-14.4,25.2],[7,10.4],[25.25,14.5],[41.15,1.7]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});[-42,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
+[[ -38.55,4.9],[-33.3,5.6],[-28.75,3.5],[-14.4,25.2],[7,10.4],[25.25,14.5],[41.15,1.7]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});[-42,-41,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
 /* A separate six-metre vehicle opening serves the added west-end parking. */
-[[-57.5,5],[-45.5,7]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});
-[-60,-55,-49,-42,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
+[[ -57.5,5],[-45.7,6.6]].forEach(([x,w])=>{bx(w,.9,.3,tm('plaster',w/2.2,.4),x,.45,16.1,site);bx(w+.1,.1,.4,cap,x,.95,16.1,site)});
+[-60,-55,-49,-42.4,-41,-36.1,-30.5,-27,-1.8,1.8,12.2,17.8,32.5,40.3].forEach(x=>{bx(.5,1.7,.5,cap,x,.85,16.1,site);bx(.6,.1,.6,GOLD,x,1.75,16.1,site)});
 bx(6,.08,8,tm('asphalt',3,4,{bumpScale:.3}),-52,-.05,12.3,site);sign('LEFT PARKING · VEHICLE ENTRY','Five customer spaces · inside the perimeter',4.4,.58,-52,2.3,15.25,site,{bg:'#1A395B'});
 /* Five perpendicular customer bays in a dedicated paved area beyond the pub. */
 {const p=new THREE.Group();site.add(p);bx(17,.1,11.5,tm('asphalt',8.5,5.75,{bumpScale:.3}),-51.5,-.05,4.75,p);for(let x=-60;x<=-43;x+=3.4)bx(.1,.01,5.2,0xffffff,x,.01,5.1,p);bx(17,.01,.1,0xffffff,-51.5,.01,2.5,p);bx(17,.01,.1,0xffffff,-51.5,.01,7.7,p);[-58.3,-54.9,-51.5,-48.1,-44.7].forEach((x,i)=>car(x,5.1,PI/2,[0xe53935,0x1e88e5,0xeeeeee,0x424242,0xfdd835][i],p));[-59.5,-43.5].forEach(x=>{cy(.05,3,0x444,x,1.5,8.7,p);bx(.55,.14,.55,0xfff1c9,x,3.05,8.7,p,0xffd37a);glow(x,3,8.7,2.4,0xffd9a0,p)});sign('CUSTOMER PARKING','5 spaces · beyond the pub',2.7,.52,-51.5,2.45,8.4,p,{bg:'#1A395B'});}
-bx(5.6,.08,14.4,tm('pavers',2.5,7,{color:0x8e897d}),-33.3,-.045,9.0,site);bx(5.3,.05,4.2,0x755a6d,-33.3,.02,15.7,site);sign('PUB WALK-IN GATE','Pedestrian access · no vehicle traffic',4,.56,-33.3,2.25,15.35,site,{bg:'#45234b',ac:'#f2c968'});
+/* Independent pedestrian gate and clear paved route around the east edge of parking to the pub door. */
+bx(1.4,.08,24.2,tm('pavers',.9,12,{color:0x8e897d}),-41.7,-.045,7.7,site);bx(14.7,.08,1.6,tm('pavers',8,1.2,{color:0x8e897d}),-49.05,-.045,-4.5,site);sign('PUB WALK-IN GATE','Independent building · follow the path',3.7,.54,-39.2,2.25,15.25,site,{bg:'#45234b',ac:'#f2c968'});
 /* Road-facing fuel entrance: wide open gate with a paved apron directly into the forecourt. */
 bx(7.8,.08,5.4,tm('asphalt',4,3,{bumpScale:.3}),36.4,-.05,18.0,site);sign('MYLES FUEL · OPEN ENTRY','Direct access from the road',3.2,.55,36.4,2.4,15.3,site,{bg:'#c64b22',ac:'#ffe08a'});
 const trees=[[-22,-12],[-14,-14],[-5,-14.5],[8,-14.5],[16,-13.5]];
@@ -677,7 +679,7 @@ if(instant||RM){c.t.copy(gl2.t);c.th=gl2.th;c.ph=gl2.ph;c.r=gl2.r}
 info();document.querySelectorAll('#zones button').forEach(b=>b.classList.toggle('on',b.dataset.id===(sel||'all')));
 ids.forEach(k=>padStyle(k));hashW()}
 function padStyle(k){const z=Z[k];z.pad.material.opacity=z.ghost?(k===sel?.35:.12):(k===sel?.7:.28)}
-function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers enter through the main door and check in at the secure teller counter. The mini mart is the next room beside stationery and cyber services, with a supervised lobby connection. The salon and tailoring rooms continue the west wing to Myles Pub & Lounge at the far-left end, served by its own pedestrian gate. A separate five-space customer parking area sits beyond the pub with direct vehicle access from the road. Cyber and class visitors use the indoor lab door. Starlink feeds the POP rack, one Ubiquiti ceiling access point serves each room, and a Ruijie outdoor AP covers the compound, café and parking. The petrol station has a dedicated wide opening and driveway from the road. The car wash sits between the fuel pumps and a plaza-facing repair garage at the back-right corner. The garage includes open vehicle bays and an internal spare-parts shop. Roofs and the rooftop dish are shown by default. Pick a zone above, use the phase filter, or click anything.';return}
+function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers enter through the main door and check in at the secure teller counter. The mini mart is the next room beside stationery and cyber services, with a supervised lobby connection. The salon and tailoring rooms continue the west wing to an independent Myles Pub & Lounge at the far back-left corner, with its own pedestrian gate and paved path. A separate five-space customer parking area sits beside the pub with direct vehicle access from the road. Cyber and class visitors use the indoor lab door. Starlink feeds the POP rack, one Ubiquiti ceiling access point serves each room, and a Ruijie outdoor AP covers the compound, café and parking. The petrol station has a dedicated wide opening and driveway from the road. The car wash sits between the fuel pumps and a plaza-facing repair garage at the back-right corner. The garage includes open vehicle bays and an internal spare-parts shop. Roofs and the rooftop dish are shown by default. Pick a zone above, use the phase filter, or click anything.';return}
 const z=ZD[sel];e.innerHTML='<h2>'+z.name+'</h2><span class="badge">'+PH[z.phase]+'</span><span class="badge">'+(TIER[z.tier])+' cost</span><br>'+z.desc+'<br><b>Access:</b> '+ACC[z.access]+'<br><b>Income:</b> '+z.rev+'<br><b>Startup:</b> '+z.cost}
 function setPhase(p){phase=p;ids.forEach(k=>{const z=Z[k],gh=z.phase>p;z.ghost=gh;z.g.visible=!gh;z.ol.visible=gh;z.mo.visible=!!st.measure&&!gh;padStyle(k)});
 document.querySelectorAll('#phs button').forEach(b=>b.classList.toggle('on',+b.dataset.p===p));
