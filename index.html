@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MylesPlaza – 3D Plan (shade left, parking right)</title>
+<title>MylesPlaza – 3D Plan (secure customer flow & Ubiquiti WiFi)</title>
 <style>
 :root{--navy:#1A395B;--gold:#C79639;--bg:#dfe8f1;--panel:rgba(255,255,255,.94);--ink:#12263d;--chip:#fff;--mut:#5b6b7c}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1722;--panel:rgba(16,28,44,.94);--ink:#eef3f8;--chip:#1c3350;--mut:#9fb0c3}}
@@ -63,18 +63,18 @@ const PH={1:'Phase 1 · month 1',2:'Phase 2 · once foot traffic is proven',3:'P
 const PHB=[[1,'Phase 1'],[2,'1+2'],[3,'1–3'],[4,'All']];
 const TIER={'almost-nothing':'Almost nothing',low:'Low','low-medium':'Low to medium',medium:'Medium',high:'High'};
 const TIERS=Object.keys(TIER);
-const ACC={counter:'Served at the counter','staff-only':'Staff only, customers order at the counter',"own-door":'Own street door','customer-room':'Customers enter by the side door',outdoor:'Outdoor, open to everyone'};
+const ACC={counter:'Enter through the main door and stay on the customer side of the teller counter','staff-only':'Staff only, customers order at the teller counter',"own-door":'Separate annex entrance','customer-room':'Enter through the main door, check in at the teller, then use the indoor lab door',outdoor:'Outdoor, open to everyone'};
 const ZONES=[
 {id:'stat',name:'Stationery & school supplies',short:'Stationery',color:0x1e88e5,phase:1,tier:'low-medium',access:'staff-only',x:-4.2,z:-4,w:10,d:3.6,ty:1.2,th:0,ph:.9,r:10,
- desc:'Exercise books, A4 reams, pens, files and art supplies kept behind the counter. Staff fetch items, so nobody wanders the shelves. Paper bought by the carton also feeds your own printing.',rev:'10–50% by item',cost:'Low to medium: stock'},
+ desc:'The main entrance opens into a controlled customer lobby. Customers order stationery at the bank-style teller counter; staff retrieve stock from the secured shelves behind it. The same main entrance serves cyber customers and students.',rev:'10–50% by item',cost:'Low to medium: stock'},
 {id:'desk',name:'Main service desk & digital services',short:'Main service desk',color:0x8e24aa,phase:1,tier:'low',access:'counter',x:-6.3,z:4.2,w:3.6,d:6.2,ty:1,th:.45,ph:.9,r:9.5,
- desc:'Your office-style desk: you sit behind it and two customers sit in the chairs in front while you serve them. Printing, photocopy, typing, passport photos, lamination and eCitizen, KRA and URA applications are done from the side bench behind you.',rev:'High margin per job',cost:'Low: printer, laptop, laminator'},
-{id:'vouch',name:'WiFi voucher counter',short:'WiFi voucher counter',color:GOLD,phase:1,tier:'almost-nothing',access:'counter',x:-2.4,z:5.9,w:3.6,d:3.2,ty:1.1,th:0,ph:.9,r:8.5,
- desc:'Front serving counter: customers stay outside the barrier while you sell vouchers, register subscribers and answer support questions.',rev:'Your own ISP revenue',cost:'Almost nothing'},
-{id:'momo',name:'Mobile money & bill payments',short:'Mobile money & bills',color:0x43a047,phase:2,tier:'medium',access:'counter',x:1.8,z:5.9,w:3.2,d:3.2,ty:1.1,th:.1,ph:.9,r:8,
- desc:'M-Pesa and Airtel Money deposits and withdrawals through the front hatch. Daily commission and steady foot traffic. Bill payments and bundles (KPLC tokens, DStv, airtime, data) run from the same counter, so one customer can pay a token and cash out in one stop.',rev:'Commission per transaction',cost:'Medium: float capital'},
-{id:'browse',name:'Browsing, study & co-working',short:'Browsing & study',color:0x00acc1,phase:2,tier:'low-medium',access:'customer-room',x:5.6,z:3.2,w:4.8,d:5.6,ty:.9,th:-.2,ph:.8,r:10,
- desc:'The only part of the shop customers enter: a separate door, a barrier gate and glass partitions keep them away from stock and equipment. Paid browsing on the PCs, plus coding classes in holidays. Quiet study desks with lamps are rented by the hour with WiFi and printing, for students and freelancers.',rev:'Per-hour browsing, desk and class fees',cost:'Low to medium: PCs and chairs'},
+ desc:'The first teller station after the main entrance handles printing, photocopying, typing, passport photos, lamination and eCitizen, KRA and URA applications. Staff work behind a bank-style counter; customers stay in the public lobby.',rev:'High margin per job',cost:'Low: printer, laptop, laminator'},
+{id:'vouch',name:'WiFi voucher counter',short:'WiFi voucher counter',color:GOLD,phase:1,tier:'almost-nothing',access:'counter',x:-2.4,z:4,w:3.6,d:3.2,ty:1.1,th:0,ph:.9,r:8.5,
+ desc:'A teller window in the main lobby for WiFi vouchers, subscriber registration and support. Customers enter at the main door and cannot pass the secure service counter.',rev:'Your own ISP revenue',cost:'Almost nothing'},
+{id:'momo',name:'Mobile money & bill payments',short:'Mobile money & bills',color:0x43a047,phase:2,tier:'medium',access:'counter',x:1.8,z:4,w:3.2,d:3.2,ty:1.1,th:.1,ph:.9,r:8,
+ desc:'M-Pesa and Airtel Money deposits and withdrawals are handled at a secure teller window in the main lobby. Customers enter through the main door and remain in front of the counter; the teller barrier prevents access to stock and staff work areas.',rev:'Commission per transaction',cost:'Medium: float capital'},
+{id:'browse',name:'Cyber lab, study & classes',short:'Cyber lab & classes',color:0x00acc1,phase:2,tier:'low-medium',access:'customer-room',x:5.6,z:3.2,w:4.8,d:5.6,ty:.9,th:-.2,ph:.8,r:10,
+ desc:'All cyber, printing-service and class visitors enter through the main door and check in at the teller first. A controlled indoor door then leads into this open computer lab and classroom. Glass partitions keep the room separate from stationery stock and staff work areas; there is no customer side entrance.',rev:'Per-hour browsing, desk and class fees',cost:'Low to medium: PCs and chairs'},
 {id:'chg',name:'Phone charging & repair',short:'Phone charging',color:0xfb8c00,phase:2,tier:'low',access:'staff-only',x:7.2,z:-1.5,w:1.6,d:3.2,ty:.9,th:-1.1,ph:.9,r:8,
  desc:'Solar and UPS backed charging bench with accessories and quick repairs, served by staff. Power cuts push people to you.',rev:'Small per customer, volume driven',cost:'Low'},
 {id:'game',name:'PS5 gaming lounge & online play',short:'PS5 gaming lounge',color:0x5e35b1,phase:4,tier:'high',access:'own-door',x:11.7,z:0,w:7,d:12.2,ty:1,th:.45,ph:.85,r:10,
@@ -88,7 +88,7 @@ const ZONES=[
 {id:'cold',name:'Cold storage & drinks chiller',short:'Cold storage',color:0x039be5,phase:1,tier:'high',access:'staff-only',x:5.7,z:-5.2,w:4.2,d:1.8,ty:1,th:0,ph:.9,r:8.5,
  desc:'Chest freezers for fish, milk and drinks rental, plus a chiller that stocks the outdoor café. The drinks chiller runs from Phase 1; freezer rental starts in Phase 4, once the solar setup is proven.',rev:'Rental per kg or per day',cost:'High: needs oversized solar power'},
 {id:'pop',name:'POP rack, UPS & mast',short:'POP rack',color:0x546e7a,phase:1,tier:'medium',access:'staff-only',x:7.3,z:-3.6,w:1.6,d:2.8,ty:1.4,th:-1.1,ph:.9,r:8,
- desc:'Core router, switches, UPS and batteries, with the antenna mast feeding subscribers. Billing and RADIUS stay in the cloud.',rev:'Enables every other line',cost:'Medium: router, UPS, batteries, mast'},
+ desc:'Starlink provides the upstream internet connection to the MikroTik router, switch, UPS and batteries in the POP rack. The router feeds one Ubiquiti ceiling access point in every enclosed room plus a central outdoor access point for compound-wide WiFi.',rev:'Enables every other line',cost:'Medium: router, UPS, batteries, mast, Starlink'},
 {id:'net',name:'Network, CCTV & solar equipment shop',short:'Network & solar shop',color:0x3949ab,phase:2,tier:'medium',access:'counter',x:1,z:2.2,w:3.8,d:3.4,ty:1.2,th:.15,ph:.8,r:8,
  desc:'Counter-served shop for routers, CPEs, cables, CCTV kits, solar panels and batteries, with a demo wall customers can see through the front windows. It is your own expertise, it sells to people already on your WiFi, and it ties straight into the POP.',rev:'High margin, ties into the POP',cost:'Medium: stock capital'},
 {id:'photo',name:'Photo studio',short:'Photo studio',color:0x6d4c41,phase:3,tier:'low',access:'own-door',x:18.9,z:0,w:7,d:12.2,ty:1,th:.5,ph:.85,r:10,
@@ -211,11 +211,35 @@ const SH=4,KEEP=new Set(),BLD=new THREE.Group();S.add(BLD);const _n0=S.children.
 function wall(w,h,d,x,y,z){const m=bx(w,h,d,tm('plaster',Math.max(w,d)/2.5,h/2.5),x,y,z);WM.push(m.material);return m}
 wall(16.4,4,.2,0,2,-6.1);
 wall(.2,4,12.4,-8.1,2,0);wall(.2,4,12.4,8.1,2,0);
-wall(.5,.9,.2,-7.75,.45,6.1);wall(7.4,.9,.2,-.7,.45,6.1);wall(1.4,.9,.2,3.7,.45,6.1);wall(2.2,.9,.2,6.9,.45,6.1);
-GL(11,2.4,-2.5,2.8);GL(1.4,3.1,3.7,2.45);GL(2.2,3.1,6.9,2.45);GL(1.4,1.1,5.1,3.45);
-[-8,-5.25,-2.5,.25,3].forEach(x=>bx(.06,2.4,.07,NAVY,x,2.8,6.1));bx(11,.06,.07,NAVY,-2.5,1.6,6.1);bx(11,.06,.07,NAVY,-2.5,4,6.1);
+wall(.5,.9,.2,-7.75,.45,6.1);wall(7.4,.9,.2,-.7,.45,6.1);wall(1.4,.9,.2,3.7,.45,6.1);wall(1.4,.9,.2,5.1,.45,6.1);wall(2.2,.9,.2,6.9,.45,6.1);
+/* Main public entrance replaces the old window bay on the left. The other bays stay glazed; no cyber side entrance. */
+GL(1.35,2.4,-7.3,2.8);GL(8.1,2.4,-.95,2.8);GL(1.4,3.1,3.7,2.45);GL(1.4,2.0,5.1,1.9);GL(2.2,3.1,6.9,2.45);GL(1.4,1.1,5.1,3.45);
+{
+const dx=-5.95,dz=6.1,door=new THREE.Group();door.position.set(dx,.9,dz);S.add(door);
+bx(1.55,2.45,.1,NAVY,0,1.22,0,door);bx(1.36,2.25,.045,0xc6e8f8,0,1.22,.07,door);
+bx(.045,.16,.06,GOLD,.52,1.16,.12,door);bx(.08,2.35,.08,GOLD,-.76,1.17,0,door);bx(.08,2.35,.08,GOLD,.76,1.17,0,door);bx(1.6,.08,.08,GOLD,0,2.38,0,door);
+sign('MAIN ENTRANCE','All customers · cyber · classes',2.15,.54,dx,3.55,6.26,S,{bg:'#1A395B'});
+sign('ENTER HERE','Teller check-in first',1.5,.4,dx,2.15,6.24,S,{bg:'#006b73',ac:'#54d9e8'});
+}
+[-8,-2.5,.25,3].forEach(x=>bx(.06,2.4,.07,NAVY,x,2.8,6.1));
+[[1.3,-7.35],[8.1,-.95]].forEach(([w,x])=>{bx(w,.06,.07,NAVY,x,1.6,6.1);bx(w,.06,.07,NAVY,x,4,6.1)});
 [4.4,5.8].forEach(x=>bx(.12,2.6,.12,NAVY,x,1.3,6.1));
-sign('BROWSING & STUDY','PCs · printing · study desks',1.9,.55,5.1,2.65,6.2);
+sign('NO CYBER SIDE ENTRY','Main door · teller first',2.2,.55,5.1,2.65,6.2);
+/* Secure bank-style service line: customers approach from the main door and remain in the lobby. */
+wall(10.05,2.1,.18,-2.875,1.05,2.45);wall(.05,2.1,.18,3.275,1.05,2.45);
+bx(11.25,.12,.3,NAVY,-2.3,2.18,2.45);bx(11.25,.08,.32,GOLD,-2.3,2.24,2.45);
+/* The single monitored pass-through after the teller leads only to the cyber room. */
+bx(.1,2.1,.1,GOLD,2.02,1.05,2.45);bx(.1,2.1,.1,GOLD,3.28,1.05,2.45);bx(1.25,.08,.12,GOLD,2.65,2.1,2.45);
+bx(.88,1.7,.055,0x9de9f1,2.65,.88,2.45);bx(.07,1.8,.08,0x2587a7,2.65,.88,2.49);bx(.08,.08,.08,0xf4be48,2.95,.95,2.5);
+sign('CYBER PASS','Teller check-in first',1.35,.4,2.65,2.55,2.65,S,{bg:'#006b73',ac:'#54d9e8'});
+[-6.0,-2.4,1.6].forEach((x,i)=>{
+  bx(2.7,.9,.78,NAVY,x,.48,4.12);bx(2.8,.07,.86,GOLD,x,.96,4.12);
+  bx(2.55,.12,.08,0x263b50,x,1.62,3.68);bx(2.55,.08,.08,GOLD,x,1.7,3.68);
+  gb(2.55,.58,.045,x,1.35,3.68);bx(.13,.13,.08,0x47d7e7,x,1.35,3.63,0,0x30b8d0);
+  sign(['DIGITAL SERVICES','WiFi & SUPPORT','AIRTEL MONEY'][i],['PRINT · CYBER · BILLS','VOUCHERS · HELP','CASH IN · CASH OUT'][i],2.35,.48,x,2.25,4.0,S,{bg:'#173d64',ac:'#57d6e5'});
+});
+sign('PUBLIC LOBBY','Please stop at the teller',2.3,.48,-2.3,2.75,5.3,S,{bg:'#006b73',ac:'#54d9e8'});
+sign('STAFF ONLY','Secure stock & work area',2.25,.45,-2.3,2.9,1.95,S,{bg:'#8e2430',ac:'#ef9a9a'});
 /* facade header and fascia signboard */
 bx(16.6,.5,.3,tm('plaster',6,.4),0,4.25,6.15);bx(16.7,.06,.34,GOLD,0,4.53,6.15);bx(16.7,.06,.34,NAVY,0,3.99,6.15);
 (function(){const W=8.4,H=1.5,[c,x]=cv2(2048,366);x.fillStyle='#f7f4ec';x.fillRect(0,0,2048,366);x.strokeStyle='#C79639';x.lineWidth=10;x.strokeRect(14,14,2020,338);
@@ -238,7 +262,7 @@ for(let j=0;j<4;j++)for(let k=0;k<2;k++)it.push([.55,.13,.75,-.6+k*.7,.07+j*.13,
 for(let r=0;r<2;r++)for(let k=0;k<8;k++)it.push([.3,.04,.4,-5.4+k*.34,.82,-3.35+r*.45,pick(cols)]);inst(g,it)}
 tbl(-4.2,-3.1,3,1.1,g);
 /* ================= MAIN SERVICE DESK ================= */
-g=zone('desk');
+g=zone('desk');g.position.z=-1.2;
 tbl(-5.9,5.4,3,1.1,g);bx(.5,.35,.05,0x111,-5.9,1.02,5.6,g);bx(.44,.28,.01,0x4fc3f7,-5.9,1.02,5.57,g,0x1565c0);bx(.4,.03,.15,0x222,-5.9,.81,5.15,g);bx(.5,.1,.04,GOLD,-5.9,.84,5.9,g);bx(.3,.04,.4,0xffffff,-5.2,.8,5.4,g);
 chair(-5.9,4.5,PI,g,0x7a4b2a);chair(-6.5,6.8,0,g,0x1e88e5);chair(-5.3,6.8,0,g,0x1e88e5);
 put(g,GOLD,true,-5.9,4.45,0);put(g,0x43a047,true,-6.5,6.75,PI);put(g,0xe53935,true,-5.3,6.75,PI);
@@ -246,7 +270,7 @@ bx(1.1,1,4.2,NAVY,-7.3,.5,.4,g);bx(1.2,.06,4.3,GOLD,-7.3,1.03,.4,g);
 bx(.7,.35,.8,0xe6e6e6,-7.2,1.25,1.4,g);bx(.5,.2,.4,0xdd3333,-7.2,1.15,.3,g);bx(.06,.4,.7,0x111,-7.5,1.3,-.8,g);bx(.04,.32,.6,0x4fc3f7,-7.46,1.3,-.8,g,0x1565c0);
 bx(1.1,1.1,1.2,0xcfd4da,-7.2,.55,-3.1,g);bx(1.1,.1,1.2,0x333,-7.2,1.15,-3.1,g);bx(.06,2,1.5,0x3a7bd5,-7.95,1.2,.4,g);cy(.2,.5,0x555,-6.4,.25,.4,g);
 /* ================= VOUCHER COUNTER ================= */
-g=zone('vouch');
+g=zone('vouch');g.position.z=-1.6;
 bx(3.2,1,.8,NAVY,-2.4,.5,5.6,g);bx(3.3,.06,.9,GOLD,-2.4,1.03,5.6,g);
 bx(.5,.1,.3,0x111,-3.3,1.11,5.5,g);[-.15,.15].forEach(o=>cy(.015,.45,0x111,-3.3+o,1.4,5.5,g));
 inst(g,[0,1,2,3,4,5].map(k=>[.3,.18,.04,-2.6+k*.22,1.15,5.9,pick(cols)]));
@@ -254,21 +278,28 @@ sign('WiFi VOUCHERS','MylesNet · pay · connect',1.7,.5,-2.4,2.1,5.3,g);[-.95,.
 put(g,GOLD,false,-2.4,4.8,0);put(g,0x1e88e5,false,-2.2,7.1,PI);
 const ROUTER=new V(-3.3,1.25,5.5);
 /* ================= MOBILE MONEY + BILLS ================= */
-g=zone('momo');
+g=zone('momo');g.position.z=-1.6;
 bx(1.2,1.1,.8,0x43b02a,1.2,.55,5.6,g);bx(1.2,1.1,.8,0xe40000,2.4,.55,5.6,g);
 sign('M-PESA',null,1.1,.4,1.2,2.1,5.3,g,{bg:'#2e7d32'});sign('AIRTEL MONEY',null,1.1,.4,2.4,2.1,5.3,g,{bg:'#b71c1c'});
 sign('BILLS & BUNDLES','KPLC tokens · DStv · Airtime · Data',2.5,.45,1.8,2.75,5.3,g);
 [1.2,2.4].forEach(x=>{bx(.18,.05,.28,0x222,x,1.13,5.65,g).rotation.x=-.3;bx(.14,.01,.2,0x4fc3f7,x,1.16,5.64,g,0x1565c0).rotation.x=-.3});
 put(g,GOLD,false,1.8,4.8,0);put(g,0xfb8c00,false,1.8,7.1,PI);
-/* ================= BROWSING, STUDY, CO-WORKING ================= */
+/* ================= CYBER LAB, STUDY & CLASSES ================= */
 g=zone('browse');
-gb(.1,2.8,5.6,3.2,1.4,3.2,g);gb(4.8,2.8,.1,5.6,1.4,.4,g);bx(.1,2.1,.9,0x8b5a2b,3.2,1.05,1.2,g);
+gb(.1,2.8,2.1,3.2,1.4,1.45,g);gb(.1,2.8,1.1,3.2,1.4,5.45,g);gb(4.8,2.8,.1,5.6,1.4,.4,g);bx(.1,2.1,.9,0x8b5a2b,3.2,1.05,1.2,g);
+/* Interior-only controlled entry from the public lobby into the open cyber/classroom. */
+{
+const gate=new THREE.Group();gate.position.set(3.2,.0,2.9);g.add(gate);
+bx(.08,2.28,.08,NAVY,0,1.14,0,gate);bx(1.55,.08,.08,GOLD,0,2.28,0,gate);
+bx(1.3,2.12,.06,0xbfe6ff,-.68,1.12,.05,gate);bx(.1,2.22,.1,GOLD,-1.4,1.12,0,gate);bx(.1,2.22,.1,GOLD,.02,1.12,0,gate);
+sign('CYBER & CLASSES','After teller check-in',1.9,.48,3.45,2.48,3.05,S,{bg:'#006b73',ac:'#54d9e8'});
+}
 [4.7,5.5].forEach(x=>bx(.06,1,.06,NAVY,x,.5,5.5,g));bx(.8,.04,.04,GOLD,4.95,.98,5.0,g).rotation.y=1.1;
 tbl(7.4,3.2,.9,4.4,g);[1.6,2.7,3.8,4.9].forEach((z,i)=>{bx(.05,.45,.7,0x111,7.6,1.05,z,g);bx(.04,.38,.62,0x4fc3f7,7.56,1.05,z,g,0x1565c0);chair(6.7,z,-PI/2,g,0x00838f);if(i==1||i==3)put(g,pick(cols),true,6.45,z,PI/2)});
 tbl(4.2,3.2,.9,3.2,g);[2.1,3.2,4.3].forEach(z=>{lap(4.2,.8,z,g,-PI/2);chair(3.65,z,-PI/2,g,0x00838f)});
 tbl(5.2,.95,2,.55,g);[4.6,5.8].forEach(x=>{cy(.03,.35,0x333,x,.95,.95,g);bx(.2,.1,.2,0xfff1c9,x,1.15,.95,g,0xffd37a)});
 chair(4.95,1.5,0,g,0x00838f);chair(5.75,1.5,0,g,0x00838f);lap(5.75,.8,.95,g,0);put(g,0x8e24aa,true,5.75,1.45,PI);
-sign('QUIET STUDY',null,1.3,.28,5.2,1.75,.5,g,{bg:'#00838f'});
+sign('OPEN CYBER LAB','Browsing · printing · coding classes',3.4,.5,5.5,2.15,.5,g,{bg:'#006b73',ac:'#54d9e8'});
 /* ================= PHONE CHARGING ================= */
 g=zone('chg');
 bx(.9,.9,2.8,0x555,7.4,.45,-1.5,g);for(let k=0;k<5;k++){bx(.22,.04,.36,0x111,7.4,.92,-2.5+k*.5,g);bx(.05,.03,.05,0x66ff66,7.4,.95,-2.4+k*.5,g,0x22cc22)}
@@ -379,11 +410,22 @@ bx(.8,1.8,.8,0x222,7.4,.9,-3.3,g);for(let k=0;k<6;k++){const l=bx(.6,.06,.02,0x6
 bx(.8,.5,.8,0x2d5a8a,7.4,.25,-4.3,g);bx(.8,.5,.8,0x2d5a8a,7.4,.8,-4.3,g);
 cy(.1,8,0x888,9.2,4,-4.5,g);[5,6.5,7.5].forEach((y,i)=>bx(.55,.9,.1,0xffffff,9.2+Math.sin(i*2)*.3,y,-4.5+Math.cos(i*2)*.3,g));
 glow(9.2,8.1,-4.5,1.5,0xff5252,g);
+sign('MIKROTIK ROUTER · PoE SWITCH','Starlink in · access points out',2.25,.48,7.2,2.55,-3.8,g,{bg:'#173d64',ac:'#57d6e5'});
 /* ================= ROOF ================= */
 const roof=new THREE.Group();roof.userData.z='pop';S.add(roof);
 const RM_=(w,d)=>tm('roof',w/1.6,d/1.6,{roughness:.55,metalness:.35});
-bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof);[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.6,12.6,18.9,3.4,0],[7.6,12.6,-18.9,3.4,0]].forEach(([w,d,x,y,z])=>bx(w,.25,d,RM_(w,d),x,y,z,roof));
+const roofPanels=[];roofPanels.push(bx(16.6,.25,12.6,RM_(16.6,12.6),0,4.1,0,roof));[[7.6,12.6,11.7,3.4,0],[7.6,12.6,-11.7,3.4,0],[7.6,12.6,18.9,3.4,0],[7.6,12.6,-18.9,3.4,0]].forEach(([w,d,x,y,z])=>roofPanels.push(bx(w,.25,d,RM_(w,d),x,y,z,roof)));
 {const sm=new THREE.MeshStandardMaterial({map:TEX.solar,roughness:.25,metalness:.5});MATS.push(sm);for(let i=0;i<12;i++){const p=bx(2,.06,1.2,sm,-5.3+(i%4)*3.5,4.45,-4.4+Math.floor(i/4)*2.6,roof);p.rotation.x=-.35}}
+/* Starlink dish uplinks to the POP router and switch. */
+{
+const dish=new THREE.Group();dish.position.set(-2.1,4.62,-3.4);roof.add(dish);
+cy(.1,.7,0x777,0,.35,0,dish);const face=new THREE.Mesh(new THREE.CircleGeometry(.72,40),M(0xf4f6f8));face.rotation.x=-PI/2;face.rotation.z=-.22;face.position.y=.73;dish.add(face);
+const rim=new THREE.Mesh(new THREE.TorusGeometry(.72,.045,10,40),M(0xd9e0e7));rim.rotation.x=-PI/2;rim.position.y=.73;dish.add(rim);
+cy(.13,.06,0x5c6670,0,.78,-.42,dish);bx(.05,.45,.05,0x777,0,.48,-.38,dish);
+sign('STARLINK','Primary internet uplink',2.05,.43,-2.1,5.55,-2.7,roof,{bg:'#173d64',ac:'#57d6e5'});
+const cable=new THREE.CatmullRomCurve3([new V(-2.1,4.9,-3.4),new V(-1.4,4.35,-3.5),new V(1.4,3.5,-3.7),new V(4.8,2.6,-3.7),new V(7.4,1.8,-3.4)]);
+roof.add(new THREE.Mesh(new THREE.TubeGeometry(cable,32,.035,6,false),M(0x24b8d0)));
+}
 
 /* ================= SITE CONTEXT ================= */
 const site=new THREE.Group();S.add(site);KEEP.add(site);
@@ -469,13 +511,35 @@ N.forEach(n=>n[1]-=SH);N.push([0,16.8,[16]],[0,6.2,[15,1,2]]);N[1][2].push(16);N
 const walkers=[0,2,4,6,9,12,1,3,15].map(n=>{const f=fig(pick(cols));f.position.set(N[n][0],0,N[n][1]);people.add(f);return{f,n,to:N[n][2][0],sp:.9+rnd()*.5}});
 const wifi=new THREE.Group();S.add(wifi);
 const rings=[0,1,2].map(()=>{const m=new THREE.Mesh(new THREE.RingGeometry(.96,1,64),new THREE.MeshBasicMaterial({color:GOLD,transparent:true,side:2,depthWrite:false}));m.rotation.x=-PI/2;m.position.copy(ROUTER);wifi.add(m);return m});
+/* UniFi-style access points: one ceiling puck per enclosed room plus a central outdoor compound AP. */
+const networkVisuals=new THREE.Group();S.add(networkVisuals);
+function apPuck(parent,{x=0,y=3.55,z=0,size=.27,tilt=0}={}){
+const ap=new THREE.Group();ap.position.set(x,y,z);ap.rotation.x=tilt;parent.add(ap);
+cy(size,.09,0xf4f6f8,0,0,0,ap);cy(size*.78,.018,0xe2e8ee,0,.052,0,ap);
+const halo=new THREE.Mesh(new THREE.TorusGeometry(size*.76,.025,8,32),M(0x278be0));halo.rotation.x=PI/2;halo.position.y=.063;ap.add(halo);
+cy(size*.13,.02,0x3a8fe2,0,.067,0,ap,0x135fae);return ap}
+const roomAPs=[['stat','Stationery'],['desk','Digital teller'],['vouch','WiFi counter'],['momo','Mobile money'],['browse','Cyber lab'],['chg','Phone charging'],['game','PS5 lounge'],['tee','T-shirt studio'],['salon','Salon'],['cold','Cold storage'],['pop','Network room'],['net','Network shop'],['photo','Photo studio'],['tailor','Tailoring']];
+roomAPs.forEach(([id])=>{const d=ZD[id],y=['game','salon','photo','tailor'].includes(id)?2.85:3.55;apPuck(networkVisuals,{x:d.x,y,z:d.z,size:.28})});
+/* The pole-mounted outdoor AP is centered between the café, building and parking. */
+const outdoorAP=new THREE.Group();outdoorAP.position.set(3.5,0,9.3);networkVisuals.add(outdoorAP);
+cy(.1,5.4,0x555,0,2.7,0,outdoorAP);cy(.22,.12,0x333,0,.06,0,outdoorAP);apPuck(outdoorAP,{x:0,y:5.42,z:0,size:.43,tilt:PI/2.8});
+sign('UBIQUITI OUTDOOR AP','Compound · café · parking WiFi',3.4,.56,3.5,6.25,9.55,networkVisuals,{bg:'#173d64',ac:'#57d6e5'});
+const coverage=new THREE.Mesh(new THREE.CircleGeometry(38,96),new THREE.MeshBasicMaterial({color:0x21b9d5,transparent:true,opacity:.045,depthWrite:false,side:THREE.DoubleSide}));coverage.rotation.x=-PI/2;coverage.position.set(0,.025,0);networkVisuals.add(coverage);
+[9,18,27,37.8].forEach(r=>{const ring=new THREE.Mesh(new THREE.RingGeometry(r-.025,r+.025,128),new THREE.MeshBasicMaterial({color:0x38cee5,transparent:true,opacity:.42,depthWrite:false,side:THREE.DoubleSide}));ring.rotation.x=-PI/2;ring.position.y=.04;networkVisuals.add(ring)});
+/* The highlighted public route runs from the main entrance to the teller, then to the indoor cyber door. */
+{
+const route=new THREE.Group();S.add(route);const pts=[new V(-5.95,.065,8.1),new V(-5.95,.065,2.15),new V(-5.95,.065,1.0),new V(-2.4,.065,1.0),new V(1.8,.065,1.0),new V(2.65,.065,.8),new V(2.65,.065,-1.55),new V(3.2,.065,-1.1)];
+const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineDashedMaterial({color:0xf4be48,dashSize:.48,gapSize:.28,transparent:true,opacity:.9}));line.computeLineDistances();route.add(line);
+bx(.2,.035,5.7,0xf4be48,-5.95,.055,5.1,route);bx(3.55,.035,.2,0xf4be48,-4.15,.055,1.0,route);bx(4.2,.035,.2,0xf4be48,-.3,.055,1.0,route);bx(.2,.035,2.3,0x32c9de,2.65,.055,-.35,route);bx(.55,.035,.2,0x32c9de,2.925,.055,-1.1,route);
+[[ -4.1,1.0,'z'],[-.3,1.0,'x'],[2.65,-.8,'z']].forEach(([x,z,dir],i)=>{const arrow=new THREE.Mesh(new THREE.ConeGeometry(.15,.34,3),M(i===2?0x32c9de:0xf4be48));arrow.rotation.x=dir==='z'?-PI/2:0;arrow.rotation.z=dir==='x'?-PI/2:0;arrow.position.set(x,.1,z);route.add(arrow)});
+}
 
 /* ================= LABELS ================= */
 const LB=ZONES.map(z=>{const d=document.createElement('div');d.className='lbl';d.textContent=z.short;$('#app').appendChild(d);return d});
 const SHOPLB=document.createElement('div');SHOPLB.className='lbl m';SHOPLB.textContent='Shop 16 × 12 m';$('#app').appendChild(SHOPLB);
 
 /* ================= STATE, CAMERA ================= */
-const st={roof:0,xray:0,night:0,people:1,wifi:1,labels:1,steam:1,tour:0,measure:0};
+const st={roof:1,xray:0,night:0,people:1,wifi:1,network:1,labels:1,steam:1,tour:0,measure:0};
 let sel=null,phase=4,nightT=0,Q='high',qAuto=true,pres=null;
 const c={t:new V(2,1,0),th:.2,ph:.82,r:50},gl2={t:new V(2,1,0),th:.2,ph:.82,r:50};
 const OV={th:.2,ph:.82,r:50};
@@ -484,7 +548,7 @@ if(instant||RM){c.t.copy(gl2.t);c.th=gl2.th;c.ph=gl2.ph;c.r=gl2.r}
 info();document.querySelectorAll('#zones button').forEach(b=>b.classList.toggle('on',b.dataset.id===(sel||'all')));
 ids.forEach(k=>padStyle(k));hashW()}
 function padStyle(k){const z=Z[k];z.pad.material.opacity=z.ghost?(k===sel?.35:.12):(k===sel?.7:.28)}
-function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers are served across the front counter and desk, or sit outside at the café under one big shade on the left. Parking is on the right, and the lane to every entrance stays clear. Browsing and study customers use the side door, gamers the PS5 lounge door, salon clients the salon door and photo clients the studio door. Tailoring is staff-only at the back. Pick a zone above, use the phase filter, or click anything.';return}
+function info(){const e=$('#info');if(!sel){e.innerHTML='<h2>'+SITE.name+'</h2><i>'+SITE.tagline+'</i> · '+SITE.by+'<br>Customers enter through the main door and check in at the secure teller counter. Cyber, printing-service and class visitors then use the indoor lab door; the cyber room stays open inside but separate from staff stock. Starlink feeds the POP rack, one Ubiquiti access point serves each room, and an outdoor Ubiquiti AP covers the compound, café and parking. The roof and rooftop dish are shown by default. Pick a zone above, use the phase filter, or click anything.';return}
 const z=ZD[sel];e.innerHTML='<h2>'+z.name+'</h2><span class="badge">'+PH[z.phase]+'</span><span class="badge">'+(TIER[z.tier])+' cost</span><br>'+z.desc+'<br><b>Access:</b> '+ACC[z.access]+'<br><b>Income:</b> '+z.rev+'<br><b>Startup:</b> '+z.cost}
 function setPhase(p){phase=p;ids.forEach(k=>{const z=Z[k],gh=z.phase>p;z.ghost=gh;z.g.visible=!gh;z.ol.visible=gh;z.mo.visible=!!st.measure&&!gh;padStyle(k)});
 document.querySelectorAll('#phs button').forEach(b=>b.classList.toggle('on',+b.dataset.p===p));
@@ -494,7 +558,7 @@ $('#tiers').innerHTML=TIERS.map(t=>'<div class="tr"><span>'+TIER[t]+'</span><i s
 $('#tn').textContent=vis.length+' zones shown. Cost figures are tiers only until real KES numbers are added.'}
 /* UI build */
 const zb=$('#zones');[['all','Overview'],...ZONES.map(z=>[z.id,z.short])].forEach(([id,n],i)=>{const b=document.createElement('button');b.dataset.id=id;b.textContent=(i?i+'. ':'')+n;b.onclick=()=>{stopPres();fly(id)};zb.appendChild(b)});
-const TOG=[['roof','Roof'],['xray','X-ray walls'],['night','Night'],['people','Customers'],['wifi','WiFi waves'],['labels','Labels'],['steam','Steam'],['tour','Auto-tour'],['measure','Measure']],tb={};
+const TOG=[['roof','Roof'],['xray','X-ray walls'],['night','Night'],['people','Customers'],['wifi','POP WiFi waves'],['network','Compound WiFi'],['labels','Labels'],['steam','Steam'],['tour','Auto-tour'],['measure','Measure']],tb={};
 function setT(k,v){st[k]=v;tb[k].classList.toggle('on',!!v);tb[k].setAttribute('aria-pressed',!!v);apply();hashW()}
 TOG.forEach(([k,n])=>{const b=document.createElement('button');b.textContent=n;b.setAttribute('aria-pressed',!!st[k]);b.classList.toggle('on',!!st[k]);b.onclick=()=>setT(k,st[k]?0:1);$('#tg').appendChild(b);tb[k]=b});
 [['Present',()=>startPres()],['Reset view',()=>{stopPres();fly('all')}],['Screenshot',()=>shot()]].forEach(([n,f])=>{const b=document.createElement('button');b.textContent=n;b.onclick=f;$('#tg').appendChild(b)});
@@ -522,7 +586,7 @@ const ei=lerp(.55,.4,n);MATS.forEach(m=>{if(!m.userData.fixEnv)m.envMapIntensity
 EMS.forEach(e=>e.m.emissiveIntensity=lerp(e.d,e.n,n));LAMPS.forEach(l=>l.intensity=n*1.4);
 GLOWS.forEach(s=>s.material.opacity=n*.85*(s.userData.k||1));stars.material.opacity=n;
 WM.forEach(()=>0)}
-function apply(){roof.visible=!!st.roof;WM.forEach(m=>{const t=!!st.xray;if(m.transparent!==t){m.transparent=t;m.needsUpdate=true}m.opacity=t?.12:1;m.depthWrite=!t});
+function apply(){roof.visible=!!st.roof;roofPanels.forEach(p=>{const seeThrough=!!st.network;if(p.material.transparent!==seeThrough){p.material.transparent=seeThrough;p.material.needsUpdate=true}p.material.opacity=seeThrough?.3:1;p.material.depthWrite=!seeThrough});networkVisuals.visible=!!st.network;WM.forEach(m=>{const t=!!st.xray;if(m.transparent!==t){m.transparent=t;m.needsUpdate=true}m.opacity=t?.12:1;m.depthWrite=!t});
 people.visible=!!st.people;wifi.visible=!!st.wifi;steam.visible=!!st.steam&&!RM;LB.forEach(l=>l.style.display=st.labels?'':'none');SHOPLB.style.display=st.measure?'':'none';
 ids.forEach(k=>Z[k].mo.visible=!!st.measure&&!Z[k].ghost)}
 /* presentation */
