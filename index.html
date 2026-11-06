@@ -544,7 +544,7 @@ roof.add(new THREE.Mesh(new THREE.TubeGeometry(cable,32,.035,6,false),M(0x24b8d0
 }
 
 /* ================= SITE CONTEXT ================= */
-const site=new THREE.Group();S.add(site);KEEP.add(site);const roadTraffic=[];
+const site=new THREE.Group();S.add(site);KEEP.add(site);const roadTraffic=[],wifiGuests=[];
 {const wallM=tm('plaster',14,1,{});WM.push;const cap=M(NAVY);
 const fenceH=1.6;[[-4,-16,112,.3],[-60,0,.3,32.3],[52,0,.3,32.3]].forEach(([x,z,w,d])=>{bx(w,fenceH,d,tm('plaster',Math.max(w,d)/2.2,.7),x,fenceH/2,z,site);bx(w+.1,.12,d+.1,cap,x,fenceH+.06,z,site)});
 /* Four controlled compound entrances: parking, pub walk-in, main plaza and fuel. */
@@ -603,7 +603,7 @@ trees.forEach(([x,z],i)=>{const t=new THREE.Group();t.position.set(x,0,z);const 
 [-2.6,6.2,21].forEach(x=>{cy(.07,6,0x444,x,3,15.8,site);bx(1.2,.08,.1,0x444,x+.5,5.95,15.8,site);bx(.5,.1,.25,0xfff1c9,x+1.05,5.9,15.8,site,0xffd37a);glow(x+1.05,5.8,15.8,3.2,0xffd37a,site)});
 function car(x,z,ry,c,parent=site){const k=new THREE.Group();k.position.set(x,0,z);k.rotation.y=ry;parent.add(k);const bm=M(c,0,{metalness:.5,roughness:.35});bx(4.2,.75,1.8,bm,0,.65,0,k);bx(2.2,.65,1.65,bm,-.1,1.35,0,k);gb(2.0,.5,1.7,-.1,1.35,0,k);[-1.3,1.3].forEach(a=>[-.85,.85].forEach(b=>cy(.36,.25,0x111,a,.36,b,k).rotation.x=PI/2));bx(.12,.2,.4,0xfff1c9,2.1,.7,.6,k,0xffd37a);bx(.12,.2,.4,0xfff1c9,2.1,.7,-.6,k,0xffd37a);return k}
 function motorcycle(x,z,ry,c){const k=new THREE.Group();k.position.set(x,0,z);k.rotation.y=ry;site.add(k);const rubber=M(0x18191b),metal=M(0x9ba6ad,0,{metalness:.65,roughness:.3}),paint=M(c,0,{metalness:.35,roughness:.32});[-.78,.78].forEach(a=>{const wheel=cy(.39,.14,rubber,a,.39,0,k);wheel.rotation.x=PI/2;const hub=cy(.17,.16,metal,a,.39,0,k);hub.rotation.x=PI/2});bx(1.15,.12,.11,metal,0,.52,0,k);bx(.5,.2,.18,paint,.05,.68,0,k);bx(.42,.13,.52,paint,.28,.85,0,k);bx(.48,.1,.3,0x24272b,-.2,.83,0,k);cy(.045,.65,metal,.65,1.04,0,k).rotation.z=PI/2;bx(.18,.12,.25,0xffe082,.82,.9,0,k,0xffd37a);const rider=new THREE.Group();rider.position.set(-.02,.77,0);k.add(rider);cy(.2,.55,M(0x263b57),0,.32,0,rider).rotation.z=-.25;cy(.13,.2,M(0xb77e5b),.12,.72,0,rider);const helmet=new THREE.Mesh(new THREE.SphereGeometry(.2,14,10),M(0xf5f5f5));helmet.position.set(.17,.91,0);helmet.scale.set(1,.82,.92);rider.add(helmet);return k}
-const addTraffic=(kind,x,z,speed,color)=>{const group=kind==='car'?car(x,z,speed<0?PI:0,color):motorcycle(x,z,speed<0?PI:0,color);roadTraffic.push({group,speed})};addTraffic('car',-27,18.65,7,0x9e1b1b);addTraffic('car',23,21.05,-8,0xdfe6ee);addTraffic('bike',-5,21.05,-10,0xe53935);addTraffic('bike',-20,18.65,9,0x1565c0);window.CARF=car}
+const addTraffic=(kind,x,z,speed,color)=>{const group=kind==='car'?car(x,z,speed<0?PI:0,color):motorcycle(x,z,speed<0?PI:0,color);group.userData.vehicleKind=kind;roadTraffic.push({group,speed,kind})};addTraffic('car',-27,18.65,7,0x9e1b1b);addTraffic('car',23,21.05,-8,0xdfe6ee);addTraffic('bike',-5,21.05,-10,0xe53935);addTraffic('bike',-20,18.65,9,0x1565c0);window.CARF=car;window.BIKEF=motorcycle}
 
 /* ================= EXTENDED ROOMS: BACK-HALF FIT-OUT ================= */
 {const ZH=id=>{const r=S.children.find(o=>o.userData.z===id),h=new THREE.Group();h.userData.z=id;r.add(h);return h};
@@ -655,7 +655,7 @@ sign('OUTDOOR WIFI CAFÉ','free WiFi with any drink',4,.6,cx,hy-.45,z1-.05,h,{bg
 sign('CAFÉ · SNACKS · FREE WiFi','with any drink',3.2,.5,-10,hy-.45,z0+.35,h,{bg:'#b71c1c',ry:PI});
 const rt=(x,z,n)=>{cy(.95,.06,0xf5f5f5,x,.78,z,h);cy(.08,.78,0x333,x,.39,z,h);cy(.45,.05,0x333,x,.05,z,h);
 for(let i=0;i<4;i++){const a=i*PI/2+.5,dx=Math.sin(a),dz=Math.cos(a);chair(x+dx*1.35,z+dz*1.35,Math.atan2(-dx,-dz)+PI,h,i%2?NAVY:0x7a4b2a);
-if(i<n){put(h,pick(cols),true,x+dx*1.2,z+dz*1.2,Math.atan2(-dx,-dz));lap(x+dx*.45,.815,z+dz*.45,h,Math.atan2(dx,dz))}else if(i===n)cy(.08,.1,0xffffff,x+dx*.5,.84,z+dz*.5,h)}
+if(i<n){const guest=put(h,pick(cols),true,x+dx*1.2,z+dz*1.2,Math.atan2(-dx,-dz));wifiGuests.push({f:guest,seated:true,nextChange:12+rnd()*24});lap(x+dx*.45,.815,z+dz*.45,h,Math.atan2(dx,dz))}else if(i===n)cy(.08,.1,0xffffff,x+dx*.5,.84,z+dz*.5,h)}
 bx(.3,.4,.02,0xffffff,x,.84,z-.35,h)};
 [[-8.9,10.6,2],[-5.2,10.6,1],[-24,13.6,2],[-20,13.6,2],[-16,13.6,1],[-12,13.6,2],[-6.5,13.6,2]].forEach(([x,z,n])=>rt(x,z,n));
 /* parking lot, inside the perimeter on the right */
@@ -722,7 +722,7 @@ for(let i=0;i<5;i++)bx(.045,.5,.04,[0xe53935,0x1565c0,0xf9a825,0xcfd8dc,0x43a047
 for(let i=0;i<3;i++){const tire=cy(.48,.2,0x202428,40.65,.3+i*.37,-4.95,g);tire.rotation.z=PI/2}
 [-5.2,-3.7].forEach(zz=>bx(1.6,.12,.18,0x777f86,33.8,.17,zz,g));
 /* Car in one bay; a motorbike and bicycle occupy the second work area. */
-CARF(34,-4.45,0,0xcbd2d7,g);bx(.12,.12,.24,0xffe082,32,.74,-5.12,g);
+CARF(35.2,-4.45,0,0xcbd2d7,g);bx(.12,.12,.24,0xffe082,32,.74,-5.12,g);
 const mkBike=(bx0,bz0,color)=>{const b=new THREE.Group();b.position.set(bx0,0,bz0);g.add(b);[-.72,.72].forEach((dx,i)=>{const wheel=new THREE.Mesh(new THREE.TorusGeometry(i?.34:.29,.045,10,24),M(0x1d2226));wheel.position.set(dx,.36,0);b.add(wheel)});
 cy(.045,.9,0xadb8bf,0,.76,0,b).rotation.z=PI/2;bx(.56,.13,.18,color,0,.79,0,b);bx(.48,.1,.16,0x263238,-.08,.98,0,b);cy(.04,.46,0x8c989f,.55,1.03,0,b).rotation.z=.5;cy(.035,.65,0x8c989f,.62,1.06,0,b).rotation.z=PI/2};
 mkBike(34,-1.8,0xf9a825);mkBike(33.8,.22,0x1565c0);
@@ -735,7 +735,40 @@ sign('MOTORBIKES · CARS · BICYCLES','Repairs and servicing',2.8,.5,35.4,2.28,-
 const people=new THREE.Group();S.add(people);
 const N=[[-9.5,7.9,[1,9]],[-3,7.9,[0,2]],[2,7.9,[1,3]],[-5.95,7.4,[2,4]],[-2.4,5,[3,5]],[2.4,2.75,[4,17]],[11.7,7.4,[7]],[11.7,5,[6,8]],[10.75,3.4,[7]],[-11.7,7.4,[0,10]],[-11.7,4.6,[9,11]],[-10.3,3,[10]],[18.9,7.4,[13]],[18.9,5,[12,14]],[17.6,3.4,[13]]];
 N.forEach(n=>n[1]-=SH);N.push([-5.95,10,[16]],[-5.95,6.1,[15,1]],[3.5,-1.25,[5]]);N[1][2].push(16);
-const walkers=[0,2,4,6,9,12,1,3,15].map(n=>{const f=fig(pick(cols));f.position.set(N[n][0],0,N[n][1]);people.add(f);return{f,n,to:N[n][2][0],sp:.9+rnd()*.5}});
+const walkers=[0,2,4,6,9,12,1,3,15].map(n=>{const f=fig(pick(cols));f.position.set(N[n][0],0,N[n][1]);people.add(f);return{f,n,to:N[n][2][0],sp:.9+rnd()*.5,wait:rnd()*2}});
+/* Short customer journeys keep the café, customer entrances, offices, service yard and pub active. */
+const visitorFlows=[];
+function visitorFlow(points,{stay=5,speed=1.15,delay=0}={}){
+const route=points.concat(points.slice(0,-1).reverse()),f=fig(pick(cols));f.position.set(points[0][0],0,points[0][1]);people.add(f);
+visitorFlows.push({f,route,outboundEnd:points.length-1,index:0,speed,stay,wait:delay+rnd()*2,hidden:false});
+}
+visitorFlow([[19.8,15.4],[14,12.2],[6,9.2],[-2,8.4],[-5.95,6.1],[-5.95,2.2],[-2.4,1],[2.4,2.75],[3.5,-5.25]],{stay:9});
+visitorFlow([[-5.95,6.1],[-8.5,6.1],[-11.7,4],[-11.7,-1]],{stay:12,delay:3});
+visitorFlow([[19.8,15.4],[13,15.4],[5,15.4],[-4,15.4],[-12,15.4],[-17,13.8],[-14.7,11.7],[-8.9,10.6]],{stay:18,delay:1});
+visitorFlow([[19.8,15.4],[19.8,11.5],[16,9.5],[12,8.2]],{stay:7,delay:4});
+visitorFlow([[19.8,15.4],[23,13.5],[26,10],[26.1,4]],{stay:9,delay:1});
+visitorFlow([[40.8,15.4],[44,15.4],[46.4,13.4],[46.4,10.5]],{stay:8,delay:2});
+visitorFlow([[40.8,15.4],[33.3,15.4],[33.3,5],[33.3,-1.35],[39.5,-1.35],[45.4,-1.35]],{stay:10,delay:5});
+visitorFlow([[40.8,15.4],[33.3,15.4],[33.3,-10.65],[39.8,-10.65]],{stay:13,delay:3});
+visitorFlow([[-38.2,15.4],[-45,15],[-56,15],[-57,-5],[-52,-5.9]],{stay:20,delay:2});
+visitorFlow([[-38.2,15.4],[-44,15],[-52,12],[-52,6],[-51.5,5.1]],{stay:7,delay:6});
+visitorFlow([[-38.2,15.4],[-44,15],[-51,13],[-52,8],[-52,2],[-52,-4]],{stay:12,delay:8});
+/* Vehicle trips use the compound gates and internal aisle, then turn around at their service stop. */
+const serviceTrips=[];
+function serviceTrip(kind,points,{color,stopIndex=-1,stop=0,speed=6,delay=0}={}){
+const first=points[0],next=points[1],yaw=Math.atan2(-(next[1]-first[1]),next[0]-first[0]),make=kind==='car'?window.CARF:window.BIKEF,g=make(first[0],first[1],yaw,color);g.userData.vehicleKind=kind;
+g.visible=false;serviceTrips.push({group:g,points,index:-2,speed,stopIndex,stop,stopped:false,wait:delay,respawn:0,kind});
+}
+const backFuel=[[12,18.65],[26,18.65],[40,18.65],[46.4,18.65],[46.4,15.4],[46.4,13.4],[42,13.4],[41.5,10.5],[42,13.4],[46.4,13.4],[46.4,15.4],[46.4,18.65],[55,18.65]];
+const backGarage=[[0,18.65],[16,18.65],[32,18.65],[40,18.65],[46.4,18.65],[46.4,15.4],[33.3,15.4],[33.3,5],[33.3,-13.75],[40.4,-13.75],[33.3,-13.75],[33.3,5],[33.3,15.4],[46.4,15.4],[46.4,18.65],[55,18.65]];
+const backMoto=[[8,18.65],[24,18.65],[40,18.65],[46.4,18.65],[46.4,15.4],[33.3,15.4],[33.3,5],[33.3,-11.1],[40.4,-11.1],[33.3,-11.1],[33.3,5],[33.3,15.4],[46.4,15.4],[46.4,18.65],[55,18.65]];
+const backWash=[[-12,18.65],[4,18.65],[20,18.65],[36,18.65],[46.4,18.65],[46.4,15.4],[33.3,15.4],[33.3,5],[33.3,-1.35],[39.5,-1.35],[49.5,-3.25],[45.4,-3.25],[39.5,-3.25],[33.3,-1.35],[33.3,5],[33.3,15.4],[46.4,15.4],[46.4,18.65],[55,18.65]];
+const westParking=[[-68,18.65],[-60,18.65],[-52,18.65],[-52,15.4],[-52,12.3],[-52,8.8],[-52,12.3],[-52,15.4],[-52,18.65],[-60,18.65],[-70,18.65],[-78,18.65]];
+serviceTrip('car',backFuel,{color:0x1e88e5,stopIndex:7,stop:5,speed:5.5,delay:1});
+serviceTrip('car',backGarage,{color:0xdfe6ee,stopIndex:9,stop:9,speed:5.5,delay:5});
+serviceTrip('bike',backMoto,{color:0xf9a825,stopIndex:8,stop:8,speed:6,delay:31});
+serviceTrip('car',backWash,{color:0x43a047,stopIndex:10,stop:10,speed:5.5,delay:17});
+serviceTrip('car',westParking,{color:0xe53935,stopIndex:5,stop:5,speed:6,delay:7});
 const wifi=new THREE.Group();S.add(wifi);
 const rings=[0,1,2].map(()=>{const m=new THREE.Mesh(new THREE.RingGeometry(.96,1,64),new THREE.MeshBasicMaterial({color:GOLD,transparent:true,side:2,depthWrite:false}));m.rotation.x=-PI/2;m.position.copy(ROUTER);wifi.add(m);return m});
 /* Ubiquiti-style ceiling access points inside rooms; Ruijie outdoor AP for compound coverage. */
@@ -774,7 +807,7 @@ const LB=ZONES.map(z=>{const d=document.createElement('div');d.className='lbl';d
 const SHOPLB=document.createElement('div');SHOPLB.className='lbl m';SHOPLB.textContent='Shop 16 × 12 m';$('#app').appendChild(SHOPLB);
 
 /* ================= STATE, CAMERA ================= */
-const st={roof:1,xray:0,night:0,people:1,wifi:1,network:1,labels:1,steam:1,tour:0,measure:0};
+const st={roof:1,xray:0,night:0,people:1,traffic:1,wifi:1,network:1,labels:1,steam:1,tour:0,measure:0};
 let sel=null,infoOpen=false,phase=4,nightT=0,Q='high',qAuto=true,pres=null;
 const c={t:new V(-4,1,1),th:.2,ph:.82,r:96},gl2={t:new V(-4,1,1),th:.2,ph:.82,r:96};
 const OV={th:.2,ph:.82,r:96};
@@ -794,7 +827,7 @@ $('#tiers').innerHTML=TIERS.map(t=>'<div class="tr"><span>'+TIER[t]+'</span><i s
 $('#tn').textContent=vis.length+' zones shown. Cost figures are tiers only until real KES numbers are added.'}
 /* UI build */
 const zb=$('#zones');[['all','Overview'],...ZONES.map(z=>[z.id,z.short])].forEach(([id,n],i)=>{const b=document.createElement('button');b.dataset.id=id;b.textContent=(i?i+'. ':'')+n;b.onclick=()=>{stopPres();fly(id,false,true)};zb.appendChild(b)});
-const TOG=[['roof','Roof'],['xray','X-ray walls'],['night','Night'],['people','Customers'],['wifi','POP WiFi waves'],['network','Compound WiFi'],['labels','Labels'],['steam','Steam'],['tour','Auto-tour'],['measure','Measure']],tb={};
+const TOG=[['roof','Roof'],['xray','X-ray walls'],['night','Night'],['people','Customers'],['traffic','Traffic'],['wifi','POP WiFi waves'],['network','Compound WiFi'],['labels','Labels'],['steam','Steam'],['tour','Auto-tour'],['measure','Measure']],tb={};
 function setT(k,v){st[k]=v;tb[k].classList.toggle('on',!!v);tb[k].setAttribute('aria-pressed',!!v);apply();hashW()}
 TOG.forEach(([k,n])=>{const b=document.createElement('button');b.textContent=n;b.setAttribute('aria-pressed',!!st[k]);b.classList.toggle('on',!!st[k]);b.onclick=()=>setT(k,st[k]?0:1);$('#tg').appendChild(b);tb[k]=b});
 const ZOOM_MIN=.25,ZOOM_MAX=260;let panMode=false,panButton;
@@ -811,7 +844,7 @@ let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add
 const QS={low:{pr:1,sh:1024,walk:3,trees:4},medium:{pr:1.5,sh:2048,walk:5,trees:7},high:{pr:2,sh:2048,walk:8,trees:10}};
 function applyQ(){const q=QS[Q];R.setPixelRatio(Math.min(window.devicePixelRatio||1,q.pr));size();
 if(sun.shadow.mapSize.x!==q.sh){sun.shadow.mapSize.set(q.sh,q.sh);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null}}
-walkers.forEach((w,i)=>w.f.userData.off=i>=q.walk);site.userData.trees.forEach((t,i)=>t.visible=i<q.trees);
+walkers.forEach((w,i)=>w.f.userData.off=i>=q.walk);visitorFlows.forEach((w,i)=>w.f.userData.off=i>=q.walk);site.userData.trees.forEach((t,i)=>t.visible=i<q.trees);
 document.querySelectorAll('#qs button').forEach(b=>b.classList.toggle('on',qAuto?b.dataset.q==='auto':b.dataset.q===Q))}
 function setQ(q){if(q==='auto'){qAuto=true}else{qAuto=false;Q=q}applyQ();hashW()}
 /* night / lighting */
@@ -826,7 +859,7 @@ EMS.forEach(e=>e.m.emissiveIntensity=lerp(e.d,e.n,n));LAMPS.forEach(l=>l.intensi
 GLOWS.forEach(s=>s.material.opacity=n*.85*(s.userData.k||1));stars.material.opacity=n;
 WM.forEach(()=>0)}
 function apply(){roof.visible=!!st.roof;extraRoofs.forEach(p=>p.visible=!!st.roof);roofPanels.forEach(p=>{if(p.material.transparent){p.material.transparent=false;p.material.needsUpdate=true}p.material.opacity=1;p.material.depthWrite=true});networkVisuals.visible=!!st.network;WM.forEach(m=>{const t=!!st.xray;if(m.transparent!==t){m.transparent=t;m.needsUpdate=true}m.opacity=t?.12:1;m.depthWrite=!t});
-people.visible=!!st.people;wifi.visible=!!st.wifi;steam.visible=!!st.steam&&!RM;LB.forEach(l=>l.style.display=st.labels?'':'none');SHOPLB.style.display=st.measure?'':'none';
+people.visible=!!st.people;wifiGuests.forEach(g=>g.f.visible=!!st.people&&g.seated);roadTraffic.forEach(v=>v.group.visible=!!st.traffic);serviceTrips.forEach(v=>v.group.visible=!!st.traffic&&v.index>=0);wifi.visible=!!st.wifi;steam.visible=!!st.steam&&!RM;LB.forEach(l=>l.style.display=st.labels?'':'none');SHOPLB.style.display=st.measure?'':'none';
 ids.forEach(k=>Z[k].mo.visible=!!st.measure&&!Z[k].ghost)}
 /* presentation */
 function startPres(){if(pres)return;const order=ZONES.map((z,i)=>({z,i})).sort((a,b)=>a.z.phase-b.z.phase||a.i-b.i);
@@ -883,9 +916,34 @@ if(st.wifi)rings.forEach((m,i)=>{const s=(t*.3+i/3)%1;m.scale.setScalar(.4+s*9);
 if(st.steam&&!RM)puffs.forEach(p=>{const s=(t*.4+p.userData.o)%1;p.position.set(p.userData.x+Math.sin(t*3+p.userData.o*9)*.02,p.userData.y+s*.5,p.userData.z);p.material.opacity=(1-s)*.45;p.scale.setScalar(1+s*1.5)});
 if(nightT>.3&&!RM)NEON.forEach((m,i)=>{m.emissiveIntensity=1.6+Math.sin(t*9+i*3)*.12+(Math.sin(t*31+i)>.97?-.6:0)});
 LEDS.forEach(l=>l.material.emissiveIntensity=Math.sin(t*5+l.userData.k*1.7)>-.2?1:.15);
-roadTraffic.forEach(v=>{v.group.position.x+=v.speed*dt;if(v.speed>0&&v.group.position.x>ROAD_MAX-2.2)v.group.position.x=ROAD_MIN+2.2;else if(v.speed<0&&v.group.position.x<ROAD_MIN+2.2)v.group.position.x=ROAD_MAX-2.2});
-walkers.forEach(w=>{const off=w.f.userData.off;w.f.visible=!off;if(off||!st.people)return;const tg=N[w.to];tmp.set(tg[0]-w.f.position.x,0,tg[1]-w.f.position.z);const d=tmp.length();
-if(d<.1){const nx=N[w.to][2].filter(k=>k!==w.n);w.n=w.to;w.to=pick(nx.length?nx:N[w.to][2])}else{tmp.normalize();w.f.position.addScaledVector(tmp,.03*w.sp*dt*60);w.f.rotation.y=Math.atan2(tmp.x,tmp.z);const ph=t*8*w.sp,u=w.f.userData;u.legs[0].rotation.x=Math.sin(ph)*.6;u.legs[1].rotation.x=-Math.sin(ph)*.6;u.arms[0].rotation.x=-Math.sin(ph)*.5;u.arms[1].rotation.x=Math.sin(ph)*.5;w.f.position.y=Math.abs(Math.sin(ph))*.03}});
+const vehicles=[...roadTraffic,...serviceTrips];
+function clearVehicleSpace(v,x,z,yaw){
+const ext=(o,a)=>{const bike=o.kind==='bike'||o.group.userData.vehicleKind==='bike',len=bike?1.65:4.2,w=bike?.72:1.8,c=Math.abs(Math.cos(a)),s=Math.abs(Math.sin(a));return[(len*c+w*s)/2+.12,(len*s+w*c)/2+.12]};
+const [hx,hz]=ext(v,yaw);
+return vehicles.every(o=>{if(o===v||!o.group.visible)return true;const a=o.group.rotation.y,[ox,oz]=ext(o,a),dx=Math.abs(x-o.group.position.x),dz=Math.abs(z-o.group.position.z);return dx>=hx+ox||dz>=hz+oz});
+}
+if(st.traffic)roadTraffic.forEach(v=>{
+const nextX=v.group.position.x+v.speed*dt,wrap=v.speed>0?nextX>ROAD_MAX-2.2:nextX<ROAD_MIN+2.2;
+const x=wrap?(v.speed>0?ROAD_MIN+2.2:ROAD_MAX-2.2):nextX;
+if(clearVehicleSpace(v,x,v.group.position.z,v.group.rotation.y))v.group.position.x=x;
+});
+if(st.traffic)serviceTrips.forEach(v=>{
+if(v.index===-2){v.wait=Math.max(0,v.wait-dt);if(v.wait<=0&&clearVehicleSpace(v,v.points[0][0],v.points[0][1],v.group.rotation.y)){v.index=0;v.group.visible=true}return}
+if(v.index>=v.points.length){v.group.visible=false;v.respawn=3+rnd()*7;v.index=-1;return}
+if(v.index<0){v.respawn-=dt;if(v.respawn<=0&&clearVehicleSpace(v,v.points[0][0],v.points[0][1],v.group.rotation.y)){v.index=0;v.stopped=false;v.group.position.set(v.points[0][0],0,v.points[0][1]);v.group.visible=true}return}
+const target=v.points[v.index];tmp.set(target[0]-v.group.position.x,0,target[1]-v.group.position.z);const d=tmp.length();
+if(d<.16){v.group.position.set(target[0],0,target[1]);if(v.index===v.stopIndex&&!v.stopped){v.stopped=true;v.wait=v.stop;return}v.index++;return}
+const yaw=Math.atan2(-tmp.z,tmp.x),step=Math.min(d,v.speed*dt),nx=v.group.position.x+tmp.x/d*step,nz=v.group.position.z+tmp.z/d*step;
+if(clearVehicleSpace(v,nx,nz,yaw)){v.group.position.set(nx,0,nz);v.group.rotation.y=yaw}
+});
+walkers.forEach(w=>{const off=w.f.userData.off;w.f.visible=!off;if(off||!st.people)return;if(w.wait>0){w.wait-=dt;return}const tg=N[w.to];tmp.set(tg[0]-w.f.position.x,0,tg[1]-w.f.position.z);const d=tmp.length();
+if(d<.1){const nx=N[w.to][2].filter(k=>k!==w.n);w.n=w.to;w.to=pick(nx.length?nx:N[w.to][2]);w.wait=1.5+rnd()*4}else{tmp.normalize();w.f.position.addScaledVector(tmp,.03*w.sp*dt*60);w.f.rotation.y=Math.atan2(tmp.x,tmp.z);const ph=t*8*w.sp,u=w.f.userData;u.legs[0].rotation.x=Math.sin(ph)*.6;u.legs[1].rotation.x=-Math.sin(ph)*.6;u.arms[0].rotation.x=-Math.sin(ph)*.5;u.arms[1].rotation.x=Math.sin(ph)*.5;w.f.position.y=Math.abs(Math.sin(ph))*.03}});
+visitorFlows.forEach(v=>{if(!st.people)return;if(v.f.userData.off){v.f.visible=false;return}if(v.hidden){v.wait-=dt;if(v.wait<=0){v.hidden=false;v.index=0;v.f.position.set(v.route[0][0],0,v.route[0][1]);v.f.visible=true}return}if(v.wait>0){v.wait-=dt;return}
+const target=v.route[v.index];tmp.set(target[0]-v.f.position.x,0,target[1]-v.f.position.z);const d=tmp.length();
+if(d<.13){v.f.position.set(target[0],0,target[1]);if(v.index===v.outboundEnd){v.wait=v.stay;v.outboundEnd=-1;return}if(v.index>=v.route.length-1){v.f.visible=false;v.hidden=true;v.wait=2+rnd()*9;v.index=0;v.outboundEnd=(v.route.length-1)/2;return}v.index++;return}
+tmp.normalize();v.f.position.addScaledVector(tmp,v.speed*dt);v.f.rotation.y=Math.atan2(tmp.x,tmp.z);const ph=t*7.5,u=v.f.userData;u.legs[0].rotation.x=Math.sin(ph)*.55;u.legs[1].rotation.x=-Math.sin(ph)*.55;u.arms[0].rotation.x=-Math.sin(ph)*.4;u.arms[1].rotation.x=Math.sin(ph)*.4;v.f.position.y=Math.abs(Math.sin(ph))*.025;
+});
+wifiGuests.forEach(g=>{if(!st.people)return;if(t>=g.nextChange){g.seated=!g.seated;g.f.visible=!!st.people&&g.seated;g.nextChange=t+(g.seated?16+rnd()*24:5+rnd()*9)}});
 if(st.labels||st.measure){ZONES.forEach((z,i)=>{const l=LB[i];if(!st.labels){l.style.display='none';return}
 /* Room and café labels appear only inside that room and never through an opaque object or roof. */
 const inside=Math.abs(Cam.position.x-z.x)<z.w/2&&Math.abs(Cam.position.z-z.z)<z.d/2&&Cam.position.y<4.3;
